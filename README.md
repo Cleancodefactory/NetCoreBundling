@@ -32,7 +32,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 }
 ```
 
-- Render the configured bundles:
+- Render the configured bundles:  
 In your master page or razor view you have to call the created bundles:
 ```cs
 @using ccf.CoreKraft.Web.Bundling
@@ -53,5 +53,5 @@ In your master page or razor view you have to call the created bundles:
 
 ### Advanced usage ###
 
-##License
-This project is licensed under the Apache License. This means that you can use, modify and distribute it freely. See http://www.apache.org/licenses/LICENSE-2.0.html for more details.
+## License ##
+This project is licensed under the Apache License. This means that you can use, modify and distribute it freely. See [http://www.apache.org/licenses/LICENSE-2.0.html](http://www.apache.org/licenses/LICENSE-2.0.html) for more details.
