@@ -1,5 +1,5 @@
-# NetCoreBundling#
-A .Net Core rewrite and extension of the former Asp.Net Web Optimization bundling framework
+# NetCoreBundling #
+A .Net Core rewrite and extension of the former Asp.Net Web Optimization bundling framework.This project was created to support complex bootstrapping and optimization tasks for [www.bindkraft.io](http://www.bindkraft.io).
 
 ## Why NetCoreBundling ##
 Microsoft's Asp.Net Web Optimization bundling framework offered a convenient way for configuring bundles in code. Depending on the environment Debug/Release it was possible to serve the resources in different forms (e.g. minified or not).
