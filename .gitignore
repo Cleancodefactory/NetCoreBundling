@@ -499,3 +499,6 @@ jspm_packages
 ### VisualStudio Patch ###
 build/
 
+/src/Bundling/ccf.CoreKraft.Web.Bundling/nuget.exe
+/src/Bundling/ccf.CoreKraft.Web.Bundling/PackNuget.bat
+/src/Bundling/ccf.CoreKraft.Web.Bundling/nuget.exe
