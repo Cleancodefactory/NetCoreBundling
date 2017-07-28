@@ -1,0 +1,1 @@
+nuget.exe pack ccf.CoreKraft.Web.Bundling.nuspec

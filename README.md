@@ -7,7 +7,7 @@ You will say it is possible in .NET Core as well by using Gulp tasks. It is inde
 For all these cases we are providing NetCoreBundling.
 
 ## Getting started ##
-To use NetCoreBundling you have to install the NuGet-Package from here: NUGET-PACKAGE
+To use NetCoreBundling you have to install the NuGet-Package from here: [https://www.nuget.org/packages/NetCoreBundling](https://www.nuget.org/packages/NetCoreBundling)
 
 ### Simple usage ###
 - Init the BundleCollection in Configure:
