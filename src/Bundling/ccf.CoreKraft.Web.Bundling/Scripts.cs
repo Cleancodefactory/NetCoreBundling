@@ -34,9 +34,9 @@ namespace ccf.CoreKraft.Web.Bundling
         {
             StringBuilder sb = new StringBuilder();
             BundleResponse bundleResponse;
+            bundleResponse = bundle.ExecuteTransformations();
             if (BundleCollection.Instance.EnableOptimizations)
             {
-                bundleResponse = bundle.ExecuteTransformations();
                 foreach (CdnObject cdn in bundleResponse.InputCdns)
                 {
                     string additional = !string.IsNullOrEmpty(cdn.Integrity) ? $"integrity='{cdn.Integrity}'" : string.Empty;
@@ -47,7 +47,6 @@ namespace ccf.CoreKraft.Web.Bundling
             }
             else
             {
-                bundleResponse = bundle.ExecuteTransformations();
                 if (bundleResponse.TransformationErrors.Length > 0)
                 {
                     sb.Append("<div>");

@@ -10,20 +10,33 @@ namespace ccf.CoreKraft.Web.Bundling.Transformations
 {
     public class HtmlTransformation : IBundleTransform
     {
+        private HtmlSettings _HtmlSettings;
+        public HtmlTransformation()
+        {
+
+        }
+        public HtmlTransformation(HtmlSettings htmlSettings)
+        {
+            _HtmlSettings = htmlSettings;
+        }
         public void Process(BundleContext context, BundleResponse response)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
             if (context.EnableOptimizations)
             {
-                if (context == null)
-                {
-                    throw new ArgumentNullException(nameof(context));
-                }
-                if (response == null)
-                {
-                    throw new ArgumentNullException(nameof(response));
-                }
                 response.Content = Process(response.Content, context.Logger, response);
             }
+            else
+            {
+                response.ContentRaw = context.ContentRaw;
+            }         
         }
 
         public StringBuilder Process(StringBuilder inputHtml, ILogger logger)
@@ -62,6 +75,10 @@ namespace ccf.CoreKraft.Web.Bundling.Transformations
 
         HtmlSettings ConfigureSettings(HtmlSettings htmlSettings)
         {
+            if (_HtmlSettings != null)
+            {
+                return _HtmlSettings;
+            }
             htmlSettings.RemoveEmptyAttributes = false;
             htmlSettings.KeepOneSpaceWhenCollapsing = true;
             htmlSettings.RemoveComments = true;

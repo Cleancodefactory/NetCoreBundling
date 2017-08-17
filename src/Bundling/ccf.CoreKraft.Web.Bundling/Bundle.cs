@@ -121,8 +121,13 @@ namespace ccf.CoreKraft.Web.Bundling
                             transformation.Process(BundleContext, _BundleResponse);
                         }
                     }
-                    AddToCache(_BundleResponse);
+                    //make sure that even without transformation the input goes into the output
+                    if (_BundleResponse.ContentRaw != null && _BundleResponse.ContentRaw.Length == 0)
+                    {
+                        _BundleResponse.ContentRaw = BundleContext.ContentRaw;
+                    }
                     _BundleResponse.InputCdns = BundleContext.InputCdns;
+                    AddToCache(_BundleResponse);
                 }
             }
             return _BundleResponse;

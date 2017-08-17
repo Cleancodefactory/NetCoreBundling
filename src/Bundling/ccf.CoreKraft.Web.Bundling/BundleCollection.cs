@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.FileProviders;
+using ccf.CoreKraft.Web.Bundling.Primitives;
 
 namespace ccf.CoreKraft.Web.Bundling
 {
@@ -24,6 +25,11 @@ namespace ccf.CoreKraft.Web.Bundling
             Scripts = new Scripts();
             Styles = new Styles();
             EnableOptimizations = enableOptimizations;
+        }
+
+        public Profile Profile(string key = "Generic")
+        {
+            return null;
         }
 
         internal IFileProvider WebRootFileProvider
