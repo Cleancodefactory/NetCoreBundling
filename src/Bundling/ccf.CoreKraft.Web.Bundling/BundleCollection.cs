@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.FileProviders;
-using ccf.CoreKraft.Web.Bundling.Primitives;
+using System.Collections.Concurrent;
 
 namespace ccf.CoreKraft.Web.Bundling
 {
@@ -11,47 +10,6 @@ namespace ccf.CoreKraft.Web.Bundling
     public class BundleCollection
     {
         static BundleCollection _BundleCollection;
-        IApplicationBuilder _App;
-        IHostingEnvironment _Env;
-        ILogger _Logger;
-        string _BaseBundlingRoute;
-        internal BundleCollection(IApplicationBuilder app, IHostingEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
-        {
-            _BundleCollection = this;
-            _App = app;
-            _Env = env;
-            _Logger = logger;
-            _BaseBundlingRoute = baseBundlingRoute;
-            Scripts = new Scripts();
-            Styles = new Styles();
-            EnableOptimizations = enableOptimizations;
-        }
-
-        public Profile Profile(string key = "Generic")
-        {
-            return null;
-        }
-
-        internal IFileProvider WebRootFileProvider
-        {
-            get
-            {
-                return _Env.WebRootFileProvider;
-            }
-        }
-
-        internal Bundle GetBundle(string bundleKey)
-        {
-            if (Styles.StyleBundles.ContainsKey(bundleKey))
-            {
-                return Styles.StyleBundles[bundleKey];
-            }
-            if (Scripts.ScriptBundles.ContainsKey(bundleKey))
-            {
-                return Scripts.ScriptBundles[bundleKey];
-            }
-            throw new Exception($"The requested bundle {bundleKey} doesn't exist.");
-        }
 
         public static BundleCollection Instance
         {
@@ -60,23 +18,45 @@ namespace ccf.CoreKraft.Web.Bundling
                 return _BundleCollection;
             }
         }
-
-        public Scripts Scripts { get; private set; }
-        public Styles Styles { get; private set; }
         public bool EnableOptimizations { get; private set; }
         public bool EnableInstrumentations { get; set; }
+        public ConcurrentDictionary<string, Profile> Profiles { get; private set; }
 
-        public void Add(Bundle bundle)
+        public Profile Profile(string key = "Generic")
         {
-            bundle.BundleContext.Init(_App, _Env, _Logger, _BaseBundlingRoute, EnableOptimizations, EnableInstrumentations);
-            if (bundle is StyleBundle)
-            { 
-                Styles.StyleBundles.Add(bundle.Route, bundle);
-            }
-            else if (bundle is ScriptBundle)
+            return Profiles.GetOrAdd(key, new Profile(key));
+        }
+
+        internal BundleCollection(IApplicationBuilder app, IHostingEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
+        {
+            _BundleCollection = this;
+            ApplicationBuilder = app;
+            HostingEnvironment = env;
+            Logger = logger;
+            BaseBundlingRoute = baseBundlingRoute;
+            EnableOptimizations = enableOptimizations;
+            Profiles = new ConcurrentDictionary<string, Profile>();
+        }
+
+        internal IApplicationBuilder ApplicationBuilder { get; private set; }
+        internal IHostingEnvironment HostingEnvironment { get; private set; }
+        internal ILogger Logger { get; private set; }
+        internal string BaseBundlingRoute { get; private set; }
+
+        internal Bundle GetBundle(string bundleKey)
+        {
+            foreach (var profile in Profiles)
             {
-                Scripts.ScriptBundles.Add(bundle.Route, bundle);
+                if (profile.Value.Styles != null && profile.Value.Styles.StyleBundles.ContainsKey(bundleKey))
+                {
+                    return profile.Value.Styles.StyleBundles[bundleKey];
+                }
+                if (profile.Value.Scripts != null && profile.Value.Scripts.ScriptBundles.ContainsKey(bundleKey))
+                {
+                    return profile.Value.Scripts.ScriptBundles[bundleKey];
+                }
             }
+            throw new Exception($"The requested bundle {bundleKey} doesn't exist.");
         }
     }
 }

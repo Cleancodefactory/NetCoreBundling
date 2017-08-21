@@ -16,6 +16,11 @@ namespace ccf.CoreKraft.Web.Bundling
             StyleBundles = new Dictionary<string, Bundle>();
         }
 
+        public bool HasBundle(string bundleKey)
+        {
+            return StyleBundles.ContainsKey(bundleKey);
+        }
+
         public Styles Exclude(string bundleKey)
         {
             return (Styles)StyleBundles.Where(p => p.Key == bundleKey).ToDictionary(p => p.Key, p => p.Value);

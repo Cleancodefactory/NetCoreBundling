@@ -18,7 +18,7 @@ namespace ccf.CoreKraft.Web.Bundling
         private static readonly object _Lock = new object();
 
         #region Ctors
-        internal Bundle(string route) : this(route, BundleCollection.Instance.WebRootFileProvider, new List<IBundleTransform>())
+        internal Bundle(string route) : this(route, BundleCollection.Instance.HostingEnvironment.WebRootFileProvider, new List<IBundleTransform>())
         { }
 
         internal Bundle(string route, IFileProvider fileProvider) : this(route, fileProvider, new List<IBundleTransform>())
@@ -113,7 +113,7 @@ namespace ccf.CoreKraft.Web.Bundling
             {
                 lock (_Lock)
                 {
-                    _BundleResponse = new BundleResponse();
+                    _BundleResponse = new BundleResponse(this);
                     foreach (IBundleTransform transformation in BundleContext.Transforms)
                     {
                         if (transformation != null)

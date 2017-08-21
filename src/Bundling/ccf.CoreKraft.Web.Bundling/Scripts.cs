@@ -16,6 +16,11 @@ namespace ccf.CoreKraft.Web.Bundling
             ScriptBundles = new Dictionary<string, Bundle>();
         }
 
+        public bool HasBundle(string bundleKey)
+        {
+            return ScriptBundles.ContainsKey(bundleKey);
+        }
+
         public Scripts Exclude(string bundleKey)
         {
             return (Scripts)ScriptBundles.Where(p => p.Key == bundleKey).ToDictionary(p => p.Key, p => p.Value);

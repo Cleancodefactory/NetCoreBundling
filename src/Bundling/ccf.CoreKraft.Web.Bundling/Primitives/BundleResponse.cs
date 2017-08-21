@@ -10,11 +10,11 @@ namespace ccf.CoreKraft.Web.Bundling.Primitives
     {
         private string _Version;
         private string _ETag;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Bundle"/> class.
         /// </summary>
-        public BundleResponse()
+        public BundleResponse(Bundle parent)
         {
             CreationDate = DateTimeOffset.UtcNow;
             BundleFiles = new Dictionary<string, BundleFile>();
@@ -22,6 +22,7 @@ namespace ccf.CoreKraft.Web.Bundling.Primitives
             Content = new StringBuilder(10000);
             ContentRaw = new StringBuilder(10000);
             TransformationErrors = new StringBuilder(1000);
+            Parent = parent;
         }
 
         public Dictionary<string, BundleFile> BundleFiles { get; internal set; }
@@ -81,5 +82,7 @@ namespace ccf.CoreKraft.Web.Bundling.Primitives
                 _ETag = value;
             }
         }
+
+        public Bundle Parent { get; private set; }
     }
 }
