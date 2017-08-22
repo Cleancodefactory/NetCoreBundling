@@ -47,13 +47,27 @@ namespace ccf.CoreKraft.Web.Bundling
         {
             foreach (var profile in Profiles)
             {
-                if (profile.Value.Styles != null && profile.Value.Styles.StyleBundles.ContainsKey(bundleKey))
+                if (profile.Value.Styles != null)
                 {
-                    return profile.Value.Styles.StyleBundles[bundleKey];
+                    if (profile.Value.Styles.StyleBundles.ContainsKey(bundleKey))
+                    {
+                        return profile.Value.Styles.StyleBundles[bundleKey];
+                    }
+                    else if (profile.Value.Styles.StyleBundles.ContainsKey(bundleKey + "-css"))
+                    {
+                        return profile.Value.Styles.StyleBundles[bundleKey + "-css"];
+                    }
                 }
-                if (profile.Value.Scripts != null && profile.Value.Scripts.ScriptBundles.ContainsKey(bundleKey))
+                if (profile.Value.Scripts != null)
                 {
-                    return profile.Value.Scripts.ScriptBundles[bundleKey];
+                    if (profile.Value.Scripts.ScriptBundles.ContainsKey(bundleKey))
+                    {
+                        return profile.Value.Scripts.ScriptBundles[bundleKey];
+                    }
+                    else if (profile.Value.Scripts.ScriptBundles.ContainsKey(bundleKey + "-scripts"))
+                    {
+                        return profile.Value.Scripts.ScriptBundles[bundleKey + "-scripts"];
+                    }
                 }
             }
             throw new Exception($"The requested bundle {bundleKey} doesn't exist.");
