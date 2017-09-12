@@ -1,3 +1,8 @@
+<!--
+    "key": "net-core-bundling",
+    "title": "Net-Core-Bundling",
+    "keywords":  [ "bundling", "optimization" ]
+-->
 # NetCoreBundling #
 A .Net Core rewrite and extension of the former Asp.Net Web Optimization bundling framework.This project was created to support complex bootstrapping and optimization tasks for [www.bindkraft.io](http://www.bindkraft.io).
 
@@ -15,20 +20,22 @@ To use NetCoreBundling you have to install the NuGet-Package from here: [https:/
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DiagnosticListener diagnosticListener)
 {
 	//Bundling
-	bool useOptimization = !env.IsDevelopment();/*Minify and optimize whatever possible*/
-	BundleCollection bundleCollection = app.UseBundling(env, loggerFactory.CreateLogger("Bundling"), "res", useOptimization);
-	bundleCollection.EnableInstrumentations = env.IsDevelopment(); //Logging enabled
-
+    BundleCollection bundleCollection = app.UseBundling(env, loggerFactory.CreateLogger("Bundling"), "res", _KraftGlobalConfigurationSettings.GeneralSettings.EnableOptimization);
+    bundleCollection.EnableInstrumentations = env.IsDevelopment(); //Logging enabled
 	//Configure bundles
-	bundleCollection.Add(new StyleBundle("cssbundle").
-	Include(@"~/css/css1.css", @"~/css/css2.css").
-	IncludeCdn(new CdnObject { CdnPath = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", Integrity= "sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", Crossorigin= "anonymous" }));
-	bundleCollection.Add(new ScriptBundle("jsbundle").
-	Include(@"~/js/test1.js", @"~/js/test2.js"));
-	//Bundle dirCssBundle = new StyleBundle("~/My/CssDirFiles").IncludeDirectory("/css", "*.css", true);
-	//BundleCollection.Instance.Add(dirCssBundle);
-	//Bundle dirJsBundle = new ScriptBundle("~/My/JsDirFiles").IncludeDirectory("/js", "*.js", true);
-	//BundleCollection.Instance.Add(dirJsBundle);
+	bundleCollection.Profile("mvc").Add(new StyleBundle("cssbundle")
+        .Include(@"~/css/css1.css", @"~/css/css2.css")
+        .IncludeCdn(new CdnObject { CdnPath = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", Integrity = "sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", Crossorigin = "anonymous" })
+        .IncludeCdn(new CdnObject { CdnPath = "https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.css" })
+        .IncludeCdn(new CdnObject { CdnPath = "https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.woff" }));
+    bundleCollection.Profile("mvc").Add(new ScriptBundle("jsbundle")
+        .Include(@"~/js/test1.js", @"~/js/test2.js"));
+
+
+    //Bundle dirCssBundle = new StyleBundle("~/My/CssDirFiles").IncludeDirectory("/css", "*.css", true);
+    //BundleCollection.Instance.Add(dirCssBundle);
+    //Bundle dirJsBundle = new ScriptBundle("~/My/JsDirFiles").IncludeDirectory("/js", "*.js", true);
+    //BundleCollection.Instance.Add(dirJsBundle);
 }
 ```
 
@@ -41,11 +48,11 @@ In your master page or razor view you have to call the created bundles:
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>_Layout</title>    
-    @BundleCollection.Instance.Styles.Render()
+    @BundleCollection.Instance.Profile("mvc").Styles.Render()
 </head>
 <body>
     @RenderBody()   
-    @BundleCollection.Instance.Scripts.Render()
+    @BundleCollection.Instance.Profile("mvc").Scripts.Render()
 </body>
 </html>
 ```
