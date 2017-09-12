@@ -24,7 +24,7 @@ namespace ccf.CoreKraft.Web.Bundling.Test.Transformations
 
         public FileContentReaderTransformationTest()
         {
-            _Response = new BundleResponse();
+            _Response = new BundleResponse(null);
             _ContentReaderTransformation = new FileContentReaderTransformation();
 
             string moduleFullPath = Path.Combine(_DirName, _ModuleCSS);

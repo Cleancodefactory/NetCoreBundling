@@ -19,7 +19,7 @@ namespace ccf.CoreKraft.Web.Bundling.Test.Transformations
         public FilePathsTransformationTest()
         {
             _BundleContext = new BundleContext("kraftcss", null, null, null);
-            _Response = new BundleResponse();
+            _Response = new BundleResponse(null);
         }
 
         [Fact]

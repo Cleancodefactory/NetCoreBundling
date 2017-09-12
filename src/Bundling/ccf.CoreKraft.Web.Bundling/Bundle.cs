@@ -114,20 +114,29 @@ namespace ccf.CoreKraft.Web.Bundling
                 lock (_Lock)
                 {
                     _BundleResponse = new BundleResponse(this);
-                    foreach (IBundleTransform transformation in BundleContext.Transforms)
+                    try
                     {
-                        if (transformation != null)
+                        foreach (IBundleTransform transformation in BundleContext.Transforms)
                         {
-                            transformation.Process(BundleContext, _BundleResponse);
+                            if (transformation != null)
+                            {
+                                transformation.Process(BundleContext, _BundleResponse);
+                            }
                         }
+                        //make sure that even without transformation the input goes into the output
+                        if (_BundleResponse.ContentRaw != null && _BundleResponse.ContentRaw.Length == 0)
+                        {
+                            _BundleResponse.ContentRaw = BundleContext.ContentRaw;
+                        }
+                        _BundleResponse.InputCdns = BundleContext.InputCdns;
+                        AddToCache(_BundleResponse);
                     }
-                    //make sure that even without transformation the input goes into the output
-                    if (_BundleResponse.ContentRaw != null && _BundleResponse.ContentRaw.Length == 0)
+                    catch (Exception ex)
                     {
-                        _BundleResponse.ContentRaw = BundleContext.ContentRaw;
+                        _BundleResponse.TransformationErrors.Append($"Error in ExecuteTransformations(): {ex.Message}<br />Error details: {ex.StackTrace}").Append("<br />");
+                        throw;
                     }
-                    _BundleResponse.InputCdns = BundleContext.InputCdns;
-                    AddToCache(_BundleResponse);
+                    
                 }
             }
             return _BundleResponse;

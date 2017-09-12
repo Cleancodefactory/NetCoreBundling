@@ -86,7 +86,13 @@ namespace ccf.CoreKraft.Web.Bundling.Primitives
         /// The value for HttpContext will generally be the current instance of <see cref="HttpContext"/>. However, 
         /// using the base wrapper class enables HttpContext to be mocked for unit testing.
         /// </remarks>
-        public HttpContext HttpContext { get; internal set; }
+        public HttpContext HttpContext
+        {
+            get
+            {
+                return BundleCollection.Instance.HttpContextAccessor.HttpContext;
+            }
+        }
 
         public List<string> InputBundleFiles
         {

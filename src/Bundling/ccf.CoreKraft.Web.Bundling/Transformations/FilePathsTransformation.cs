@@ -9,16 +9,16 @@ namespace ccf.CoreKraft.Web.Bundling.Transformations
     {
         public void Process(BundleContext context, BundleResponse response)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
             try
             {
-                if (context == null)
-                {
-                    throw new ArgumentNullException(nameof(context));
-                }
-                if (response == null)
-                {
-                    throw new ArgumentNullException(nameof(response));
-                }
                 foreach (string inputFile in context.InputBundleFiles)
                 {
                     BundleFile bundleFile = new BundleFile();

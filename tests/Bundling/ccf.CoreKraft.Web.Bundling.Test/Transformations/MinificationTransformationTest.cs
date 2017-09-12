@@ -22,7 +22,7 @@ namespace ccf.CoreKraft.Web.Bundling.Test.Transformations
 
         public MinificationTransformationTest()
         {
-            _Response = new BundleResponse();
+            _Response = new BundleResponse(null);
         }
 
         [Theory]

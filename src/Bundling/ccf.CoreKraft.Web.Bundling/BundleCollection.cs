@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Http;
 
 namespace ccf.CoreKraft.Web.Bundling
 {
@@ -27,7 +28,7 @@ namespace ccf.CoreKraft.Web.Bundling
             return Profiles.GetOrAdd(key, new Profile(key));
         }
 
-        internal BundleCollection(IApplicationBuilder app, IHostingEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
+        internal BundleCollection(IApplicationBuilder app, IHostingEnvironment env, IHttpContextAccessor httpContextAccessor, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
         {
             _BundleCollection = this;
             ApplicationBuilder = app;
@@ -35,10 +36,12 @@ namespace ccf.CoreKraft.Web.Bundling
             Logger = logger;
             BaseBundlingRoute = baseBundlingRoute;
             EnableOptimizations = enableOptimizations;
+            HttpContextAccessor = httpContextAccessor;
             Profiles = new ConcurrentDictionary<string, Profile>();
         }
 
         internal IApplicationBuilder ApplicationBuilder { get; private set; }
+        internal IHttpContextAccessor HttpContextAccessor { get; private set; }
         internal IHostingEnvironment HostingEnvironment { get; private set; }
         internal ILogger Logger { get; private set; }
         internal string BaseBundlingRoute { get; private set; }

@@ -16,7 +16,7 @@ namespace ccf.CoreKraft.Web.Bundling.Test.Transformations
 
         public IncludeDirectoryTransformationTest()
         {
-            _Dir = Path.Combine(Directory.GetCurrentDirectory(), "TestFolder");
+            _Dir = Path.Combine(Directory.GetCurrentDirectory(), "IncludeDirectoryTransformationTestFolder");
             Directory.CreateDirectory(_Dir);
             File.WriteAllText(Path.Combine(_Dir, "File.css"), "qwerty");
             File.WriteAllText(Path.Combine(_Dir, "Style.css"), "Test");
@@ -40,7 +40,7 @@ namespace ccf.CoreKraft.Web.Bundling.Test.Transformations
             _BundleContext = new BundleContext("kraft", provider, null, null);
             _BundleContext.IncludeDirectory("\\", "*", Utils.PatternType.All, true);
 
-            _Response = new BundleResponse();
+            _Response = new BundleResponse(null);
 
             idt.Process(_BundleContext, _Response);
 

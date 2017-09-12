@@ -48,7 +48,7 @@ namespace ccf.CoreKraft.Web.Bundling
                     additional += !string.IsNullOrEmpty(cdn.Crossorigin) ? $" crossorigin='{cdn.Crossorigin}'" : string.Empty;
                     sb.Append($"<link href='{cdn.CdnPath}' {additional} rel='stylesheet'/>");
                 }
-                sb.Append($"<link href='/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}?{bundleResponse.Version}' rel='stylesheet'/>");
+                sb.Append($"<link href='{bundle.BundleContext.HttpContext?.Request.PathBase}/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}?{bundleResponse.Version}' rel='stylesheet'/>");
             }
             else
             {
