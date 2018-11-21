@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Nuget specific tags -->
+  <PropertyGroup>
+    <!-- Description and Release notes -->
+    <Description>Bundling and optimization framework for .NET Core and .NET-Standard projects</Description>
+    <PackageProjectUrl>https://github.com/cleancodefactory/netcorebundling</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cleancodefactory/netcorebundling</RepositoryUrl>
+    <PackageTags>bundling transformation runtime modification debug release mode optimization</PackageTags>
+    <PackageReleaseNotes>
+      Bundling and optimization framework for .NET Core and .NET-Standard projects.
+      Adding support for profiles. You can combine different bundles into one profile and render only this profile. Comes handy when you have multiple Master Pages (e.g. for public or administration) and want to easily render the different profiles.
+    </PackageReleaseNotes>
+    <!-- Description and Release notes -->
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="1.0.0" />
+    <PackageReference Include="dotless.Core" Version="1.6.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="NUglify" Version="1.5.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\BundlingResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BundlingResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\BundlingResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BundlingResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
