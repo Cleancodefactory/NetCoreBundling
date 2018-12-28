@@ -61,4 +61,7 @@ In your master page or razor view you have to call the created bundles:
 ### Advanced usage ###
 
 ## License ##
-This project is licensed under the Apache License. This means that you can use, modify and distribute it freely. See [http://www.apache.org/licenses/LICENSE-2.0.html](http://www.apache.org/licenses/LICENSE-2.0.html) for more details.
+
+This repo uses the [MIT](LICENSE.TXT) license for code.
+The project license documentation and other forms of content under
+[Creative Commons Attribution 4.0](http://creativecommons.org/licenses/by/4.0/).
