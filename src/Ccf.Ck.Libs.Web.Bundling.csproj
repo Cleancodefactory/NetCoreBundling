@@ -14,6 +14,7 @@
     <PackageReleaseNotes>
       Bundling and optimization framework for .NET Core and .NET-Standard projects.
       Adding support for profiles. You can combine different bundles into one profile and render only this profile. Comes handy when you have multiple Master Pages (e.g. for public or administration) and want to easily render the different profiles.
+      - Added ETag support
     </PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
