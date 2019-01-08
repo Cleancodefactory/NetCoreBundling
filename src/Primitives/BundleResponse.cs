@@ -8,7 +8,6 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
 {
     public class BundleResponse
     {
-        private string _Version;
         private string _ETag;
         
         /// <summary>
@@ -51,22 +50,6 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
         /// Enables control over the cache headers that are spent in the bundle response.
         /// </summary>
         public HttpCacheability Cacheability { get; set; }
-
-        public string Version
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_Version))
-                {
-                    _Version = GeneralUtility.GenerateETag(Encoding.UTF8.GetBytes(Content.ToString()));
-                }
-                return _Version;
-            }
-            set
-            {
-                _Version = value;
-            }
-        }
 
         public string ETag {
             get
