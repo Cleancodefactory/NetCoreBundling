@@ -3,6 +3,7 @@ using Ccf.Ck.Libs.Web.Bundling.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Net.Http.Headers;
 using System.Text;
 
 namespace Ccf.Ck.Libs.Web.Bundling.Middleware
@@ -27,30 +28,48 @@ namespace Ccf.Ck.Libs.Web.Bundling.Middleware
                     Bundle bundle = BundleCollection.Instance.GetBundle(bundleName);
                     if (bundle != null)
                     {
-                        if (routeData.Values.ContainsKey(BundleRouteBuilder.CATCHALL) && routeData.Values[BundleRouteBuilder.CATCHALL] != null)
-                        {
-                            fileName = routeData.Values[BundleRouteBuilder.CATCHALL].ToString();
-                        }
                         BundleResponse bundleResponse = bundle.ExecuteTransformations();
-                        if (!string.IsNullOrEmpty(fileName))    //a single file has been requested
+                        if (bundle.BundleContext.HttpContext.Request.Headers.Keys.Contains(HeaderNames.IfNoneMatch) && bundle.BundleContext.HttpContext.Request.Headers[HeaderNames.IfNoneMatch] == bundleResponse.ETag)
                         {
-                            if (bundleResponse.BundleFiles.ContainsKey(fileName))
-                            {
-                                BundleFile bundleFile = bundleResponse.BundleFiles[fileName];
-                                sb.Append(bundleFile.Content);
-                                httpContext.Response.ContentType = bundle.ContentType;
-                            }                            
+                            bundle.BundleContext.HttpContext.Response.StatusCode = StatusCodes.Status304NotModified;
+                            return;
                         }
-                        else                                    //the whole bundle is requested
+                        else
                         {
-                            sb.Append(bundleResponse.Content);
-                            httpContext.Response.ContentType = bundle.ContentType;
-                            eTag = bundleResponse.ETag;
+                            if (routeData.Values.ContainsKey(BundleRouteBuilder.CATCHALL) && routeData.Values[BundleRouteBuilder.CATCHALL] != null)
+                            {
+                                fileName = routeData.Values[BundleRouteBuilder.CATCHALL].ToString();
+                            }
+                            
+                            if (!string.IsNullOrEmpty(fileName))    //a single file has been requested
+                            {
+                                if (bundleResponse.BundleFiles.ContainsKey(fileName))
+                                {
+                                    BundleFile bundleFile = bundleResponse.BundleFiles[fileName];
+                                    sb.Append(bundleFile.Content);
+                                    httpContext.Response.ContentType = bundle.ContentType;
+                                }
+                            }
+                            else                                    //the whole bundle is requested
+                            {
+                                sb.Append(bundleResponse.Content);
+                                httpContext.Response.ContentType = bundle.ContentType;
+                                eTag = bundleResponse.ETag;
+                            }
                         }
                     }
                 }
 
-                httpContext.Response.Headers.Add("ETag", new[] { eTag });
+                IHeaderDictionary headers = httpContext.Response.Headers;
+                if (headers.ContainsKey(HeaderNames.ETag))
+                {
+                    headers[HeaderNames.ETag] = new[] { eTag };
+                }
+                else
+                {
+                    headers.Add(HeaderNames.ETag, new[] { eTag });
+                }
+
                 await httpContext.Response.WriteAsync(sb.ToString());
             };
             return requestDelegate;

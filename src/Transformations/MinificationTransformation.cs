@@ -32,7 +32,16 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
                     }
                     else if (context.Parent is ScriptBundle)
                     {
-                        uglifyResult = Uglify.Js(response.Content.ToString(), ConfigureSettings(new CodeSettings()));
+                        try
+                        {
+                            uglifyResult = Uglify.Js(response.Content.ToString(), ConfigureSettings(new CodeSettings()));
+                        }
+                        catch (Exception ex)
+                        {
+                            response.Content.Append(response.ContentRaw);
+                            response.TransformationErrors.Append($"Errors: {ex.Message}<br />Error details: {ex.StackTrace}").Append("<br />");
+                            return;
+                        }                        
                     }
                     if (uglifyResult.HasErrors)
                     {

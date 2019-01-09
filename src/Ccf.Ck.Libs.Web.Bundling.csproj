@@ -15,6 +15,7 @@
       Bundling and optimization framework for .NET Core and .NET-Standard projects.
       Adding support for profiles. You can combine different bundles into one profile and render only this profile. Comes handy when you have multiple Master Pages (e.g. for public or administration) and want to easily render the different profiles.
       - Added ETag support
+      - Version 1.0.2: Fixed the ETag support, if the build-in minification transformation throws exception the not minified version is delivered and the error is logged (more error resilient).
     </PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>

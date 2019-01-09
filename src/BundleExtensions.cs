@@ -14,31 +14,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
     {
         public static BundleCollection UseBundling(this IApplicationBuilder builder, IHostingEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
         {
-            IHttpContextAccessor contextAccessor = builder.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
-            //try
-            //{
-            //    builder.UseReact(config =>
-            //    {
-            //        // If you want to use server-side rendering of React components,
-            //        // add all the necessary JavaScript files here. This includes
-            //        // your components as well as all of their dependencies.
-            //        // See http://reactjs.net/ for more information. Example:
-            //        //config
-            //        //  .AddScript("~/Scripts/First.jsx")
-            //        //  .AddScript("~/Scripts/Second.jsx");
-
-            //        // If you use an external build too (for example, Babel, Webpack,
-            //        // Browserify or Gulp), you can improve performance by disabling
-            //        // ReactJS.NET's version of Babel and loading the pre-transpiled
-            //        // scripts. Example:
-            //        //config
-            //        //  .SetLoadBabel(false)
-            //        //  .AddScriptWithoutTransform("~/Scripts/bundle.server.js");
-            //        //config.SetLoadBabel(true);
-            //    });
-            //}
-            //catch{}
-            
+            IHttpContextAccessor contextAccessor = builder.ApplicationServices.GetRequiredService<IHttpContextAccessor>();            
             if (contextAccessor == null)
             {
                 throw new System.Exception("Please call: UseBundling(this IServiceCollection services) in your Startup.ConfigureServices(IServiceCollection services) method!");
@@ -62,7 +38,6 @@ namespace Ccf.Ck.Libs.Web.Bundling
         public static IServiceCollection UseBundling(this IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            //services.AddReact();
             return services;
         }
     }
