@@ -52,7 +52,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
                     additional += !string.IsNullOrEmpty(cdn.Crossorigin) ? $" crossorigin='{cdn.Crossorigin}'" : string.Empty;
                     sb.Append($"<script src='{cdn.CdnPath}' {additional}></script>");
                 }
-                sb.Append($"<script src='{bundle.BundleContext.HttpContext?.Request.PathBase}/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}?{bundleResponse.ETag}' type='text/javascript'></script>");
+                sb.Append($"<script src='{bundle.BundleContext.HttpContext?.Request.PathBase}/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}' type='text/javascript'></script>");
             }
             else
             {

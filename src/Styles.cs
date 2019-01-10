@@ -54,7 +54,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
                     string rel = !string.IsNullOrEmpty(cdn.Rel) ? $"rel='{cdn.Rel}'" : "rel='stylesheet'";
                     sb.Append($"<link href='{cdn.CdnPath}' {additional} {rel}/>");
                 }
-                sb.Append($"<link href='{bundle.BundleContext.HttpContext?.Request.PathBase}/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}?{bundleResponse.ETag}' rel='stylesheet'/>");
+                sb.Append($"<link href='{bundle.BundleContext.HttpContext?.Request.PathBase}/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}' rel='stylesheet'/>");
             }
             else
             {

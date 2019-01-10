@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Net.Http.Headers;
+using System;
 using System.Text;
 
 namespace Ccf.Ck.Libs.Web.Bundling.Middleware
@@ -29,9 +30,9 @@ namespace Ccf.Ck.Libs.Web.Bundling.Middleware
                     if (bundle != null)
                     {
                         BundleResponse bundleResponse = bundle.ExecuteTransformations();
-                        if (bundle.BundleContext.HttpContext.Request.Headers.Keys.Contains(HeaderNames.IfNoneMatch) && bundle.BundleContext.HttpContext.Request.Headers[HeaderNames.IfNoneMatch] == bundleResponse.ETag)
+                        if (httpContext.Request.Headers.TryGetValue(HeaderNames.IfNoneMatch, out var etag) && WithQuotes(bundleResponse.ETag) == etag)
                         {
-                            bundle.BundleContext.HttpContext.Response.StatusCode = StatusCodes.Status304NotModified;
+                            httpContext.Response.StatusCode = StatusCodes.Status304NotModified;
                             return;
                         }
                         else
@@ -40,7 +41,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Middleware
                             {
                                 fileName = routeData.Values[BundleRouteBuilder.CATCHALL].ToString();
                             }
-                            
+
                             if (!string.IsNullOrEmpty(fileName))    //a single file has been requested
                             {
                                 if (bundleResponse.BundleFiles.ContainsKey(fileName))
@@ -54,25 +55,27 @@ namespace Ccf.Ck.Libs.Web.Bundling.Middleware
                             {
                                 sb.Append(bundleResponse.Content);
                                 httpContext.Response.ContentType = bundle.ContentType;
-                                eTag = bundleResponse.ETag;
+                                eTag = WithQuotes(bundleResponse.ETag);
                             }
                         }
                     }
                 }
 
-                IHeaderDictionary headers = httpContext.Response.Headers;
-                if (headers.ContainsKey(HeaderNames.ETag))
-                {
-                    headers[HeaderNames.ETag] = new[] { eTag };
-                }
-                else
-                {
-                    headers.Add(HeaderNames.ETag, new[] { eTag });
-                }
-
+                httpContext.Response.GetTypedHeaders().CacheControl =
+                    new CacheControlHeaderValue()
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromDays(365)
+                    };
+                httpContext.Response.Headers.Add(HeaderNames.ETag, new[] { eTag });
                 await httpContext.Response.WriteAsync(sb.ToString());
             };
             return requestDelegate;
+        }
+
+        private static string WithQuotes(string value)
+        {
+            return $"\"{value}\"";
         }
     }
 }

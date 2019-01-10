@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Cryptography;
 
 namespace Ccf.Ck.Libs.Web.Bundling.Utils
@@ -9,9 +9,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Utils
         {
             using (MD5 md5 = MD5.Create())
             {
-                byte[] md5hash = md5.ComputeHash(data);
-                string hex = Convert.ToBase64String(md5hash);
-                return hex.TrimEnd('=');
+                return WebEncoders.Base64UrlEncode(md5.ComputeHash(data));
             }
         }
     }

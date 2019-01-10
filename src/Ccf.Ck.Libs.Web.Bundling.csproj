@@ -16,6 +16,7 @@
       Adding support for profiles. You can combine different bundles into one profile and render only this profile. Comes handy when you have multiple Master Pages (e.g. for public or administration) and want to easily render the different profiles.
       - Added ETag support
       - Version 1.0.2: Fixed the ETag support, if the build-in minification transformation throws exception the not minified version is delivered and the error is logged (more error resilient).
+      - Version 1.0.3: Adding CacheControl when optimization enabled: Public = true, MaxAge = TimeSpan.FromDays(365).
     </PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
@@ -26,7 +27,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions"2.2.0ion="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
