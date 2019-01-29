@@ -1,4 +1,5 @@
 ﻿using Ccf.Ck.Libs.Logging;
+using Ccf.Ck.Libs.Web.Bundling.Enumerations;
 using Ccf.Ck.Libs.Web.Bundling.Interfaces;
 using Ccf.Ck.Libs.Web.Bundling.Primitives;
 using Ccf.Ck.Libs.Web.Bundling.Resources;
@@ -42,6 +43,8 @@ namespace Ccf.Ck.Libs.Web.Bundling
                 BundleContext.Transforms.Add(new MinificationTransformation());
             }
             Route = FileUtility.RemoveFirstOccurenceSpecialCharacters(route, FileUtility.EStartPoint.FromStart, new char[] { '/', '\\' });
+            HttpCacheability = HttpCacheability.Public;
+            MaxAge = TimeSpan.FromDays(365);
         }
         #endregion Ctors
 
@@ -69,6 +72,21 @@ namespace Ccf.Ck.Libs.Web.Bundling
         public virtual Bundle IncludeCdn(CdnObject cdn)
         {
             BundleContext.InputCdns.Add(cdn);
+            return this;
+        }
+
+        /// <summary>
+        /// Defaults:
+        /// HttpCacheability = HttpCacheability.Public;
+        /// MaxAge = TimeSpan.FromDays(365);
+        /// </summary>
+        /// <param name="httpCacheability">public, private</param>
+        /// <param name="maxAge">Cache-Control: max-age=<seconds></param>
+        /// <returns></returns>
+        public virtual Bundle Caching(HttpCacheability httpCacheability, TimeSpan maxAge)
+        {
+            HttpCacheability = httpCacheability;
+            MaxAge = maxAge;
             return this;
         }
 
@@ -156,6 +174,8 @@ namespace Ccf.Ck.Libs.Web.Bundling
         }
 
         internal string Route { get; }
+        internal HttpCacheability HttpCacheability { get; private set; }
+        internal TimeSpan MaxAge { get; private set; }
         #endregion Internal
 
         #region Private

@@ -58,17 +58,22 @@ namespace Ccf.Ck.Libs.Web.Bundling.Middleware
                                 eTag = WithQuotes(bundleResponse.ETag);
                             }
                         }
+                        CacheControlHeaderValue cacheControlHeaderValue = new CacheControlHeaderValue();
+                        cacheControlHeaderValue.MaxAge = bundle.MaxAge;
+                        if (bundle.HttpCacheability == Enumerations.HttpCacheability.Public)
+                        {
+                            cacheControlHeaderValue.Public = true;
+                        }
+                        else if (bundle.HttpCacheability == Enumerations.HttpCacheability.Private)
+                        {
+                            cacheControlHeaderValue.Private = true;
+                        }
+
+                        httpContext.Response.GetTypedHeaders().CacheControl = cacheControlHeaderValue;
+                        httpContext.Response.Headers.Add(HeaderNames.ETag, new[] { eTag });
+                        await httpContext.Response.WriteAsync(sb.ToString());
                     }
                 }
-
-                httpContext.Response.GetTypedHeaders().CacheControl =
-                    new CacheControlHeaderValue()
-                    {
-                        Public = true,
-                        MaxAge = TimeSpan.FromDays(365)
-                    };
-                httpContext.Response.Headers.Add(HeaderNames.ETag, new[] { eTag });
-                await httpContext.Response.WriteAsync(sb.ToString());
             };
             return requestDelegate;
         }
