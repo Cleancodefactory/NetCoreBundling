@@ -21,65 +21,76 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
             {
                 throw new ArgumentNullException(nameof(response));
             }
-            UglifyResult uglifyResult = new UglifyResult();
-            try
+            if (context.Parent is StyleBundle)
             {
                 if (context.EnableOptimizations)
                 {
-                    if (context.Parent is StyleBundle)
-                    {
-                        uglifyResult = Uglify.Css(response.Content.ToString(), ConfigureSettings(new CssSettings()));
-                    }
-                    else if (context.Parent is ScriptBundle)
-                    {
-                        try
-                        {
-                            uglifyResult = Uglify.Js(response.Content.ToString(), ConfigureSettings(new CodeSettings()));
-                        }
-                        catch (Exception ex)
-                        {
-                            response.Content.Append(response.ContentRaw);
-                            response.TransformationErrors.Append($"Errors: {ex.Message}<br />Error details: {ex.StackTrace}").Append("<br />");
-                            return;
-                        }                        
-                    }
+                    MinifyCss(context, response);
+                }
+            }
+            else if (context.Parent is ScriptBundle)
+            {
+                if (context.EnableOptimizations)
+                {
+                    MinifyJs(context, response);
+                }
+            }
+        }
+
+        private void MinifyCss(BundleContext context, BundleResponse response)
+        {
+            UglifyResult uglifyResult = new UglifyResult();
+            response.Content = new StringBuilder(10000);
+            foreach (BundleFile bundleFile in response.BundleFiles.Values)
+            {
+                try
+                {
+                    uglifyResult = Uglify.Css(bundleFile.Content.ToString(), ConfigureSettings(new CssSettings()));
                     if (uglifyResult.HasErrors)
                     {
-                        foreach (UglifyError error in uglifyResult.Errors)
-                        {
-                            response.TransformationErrors.Append($"Errors: {error.Message}<br />Error details: {error.ToString()}").Append("<br />");
-                            context.Logger.LogCritical($"Error message: {error.Message} {Environment.NewLine} Error details: {error.ToString()}");
-                        }
+                        AddErrors(uglifyResult, context, response, bundleFile.PhysicalPath);
                     }
-                    response.Content = new StringBuilder(uglifyResult.Code.Length);
-                    response.Content.Append(uglifyResult.Code + response.ContentRaw);
+                    response.Content.Append(uglifyResult.Code);
                 }
-                else if (context.EnableInstrumentation)
+                catch (Exception ex)
                 {
-                    if (context.Parent is StyleBundle)
+                    AddErrors(ex.Message, ex.StackTrace, context, response, bundleFile.PhysicalPath);
+                    response.Content.Append(bundleFile.Content);//in case of an error append the non minified
+                }
+            }
+        }
+
+        private void MinifyJs(BundleContext context, BundleResponse response)
+        {
+            UglifyResult uglifyResult = new UglifyResult();
+            response.Content = new StringBuilder(10000);
+            foreach (BundleFile bundleFile in response.BundleFiles.Values)
+            {
+                try
+                {
+                    uglifyResult = Uglify.Js(bundleFile.Content.ToString(), ConfigureSettings(new CodeSettings()));
+                    if (uglifyResult.HasErrors)
                     {
-                        foreach (BundleFile bundleFile in response.BundleFiles.Values)
-                        {
-                            uglifyResult = Uglify.Css(bundleFile.Content.ToString(), ConfigureSettings(new CssSettings()));
-                            AddErrors(uglifyResult, context, response, bundleFile.PhysicalPath);
-                        }
+                        AddErrors(uglifyResult, context, response, bundleFile.PhysicalPath);
                     }
-                    else if (context.Parent is ScriptBundle)
+                    response.Content.Append(uglifyResult.Code);
+                    if (!string.IsNullOrEmpty(uglifyResult.Code) && uglifyResult.Code.Length > 1)
                     {
-                        foreach (BundleFile bundleFile in response.BundleFiles.Values)
+                        char last = uglifyResult.Code[uglifyResult.Code.Length - 1];
+                        if (!last.Equals('}') && !last.Equals(';'))
                         {
-                            uglifyResult = Uglify.Js(bundleFile.Content.ToString(), ConfigureSettings(new CodeSettings()));
-                            AddErrors(uglifyResult, context, response, bundleFile.PhysicalPath);
+                            response.Content.Append(";");
+                            AddErrors($"Javascript file is missing trailing ';'", $"Control and fix the missing ';'!", context, response, bundleFile.PhysicalPath);
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    AddErrors(ex.Message, ex.StackTrace, context, response, bundleFile.PhysicalPath);
+                    response.Content.Append(bundleFile.Content);//in case of an error append the non minified
+                }
             }
-            catch (Exception ex)
-            {
-                response.TransformationErrors.Append($"Error: {ex.Message} {Environment.NewLine} Error details: {ex.StackTrace}").Append(Environment.NewLine);
-                context.Logger.LogCritical($"Error: {ex.Message} {Environment.NewLine} Error details: {ex.StackTrace}", ex);
-                throw;
-            }
+            response.Content.Append(response.ContentRaw);
         }
 
         private void AddErrors(UglifyResult uglifyResult, BundleContext context, BundleResponse response, string file)
@@ -88,10 +99,18 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
             {
                 foreach (UglifyError error in uglifyResult.Errors)
                 {
-                    response.TransformationErrors.Append($"Error in {file}:<br />{error.Message}<br />Error details: {error.ToString()}").Append("<br />");
-                    context.Logger.LogCritical($"Error in {file}: {error.Message} {Environment.NewLine} Error details: {error.ToString()}");
+                    AddErrors(error.Message, error.ToString(), context, response, file);
                 }
             }
+        }
+
+        private void AddErrors(string errorShort, string errorLong, BundleContext context, BundleResponse response, string file)
+        {
+            if (context.EnableInstrumentation)
+            {
+                response.TransformationErrors.Append($"Error in {file}:<br />{errorShort}<br />Error details: {errorLong}").Append("<br />");
+            }
+            context.Logger.LogCritical($"Error in {file}: {errorShort} {Environment.NewLine} Error details: {errorLong}");
         }
 
         CssSettings ConfigureSettings(CssSettings cssSettings)
