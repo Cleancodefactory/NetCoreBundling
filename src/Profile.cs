@@ -5,6 +5,8 @@
         public Profile(string key)
         {
             Key = key;
+            Styles = new Styles();
+            Scripts = new Scripts();
         }
 
         public string  Key { get; private set; }
@@ -16,18 +18,10 @@
             bundle.BundleContext.Init(BundleCollection.Instance.ApplicationBuilder, BundleCollection.Instance.HostingEnvironment, BundleCollection.Instance.Logger, BundleCollection.Instance.BaseBundlingRoute, BundleCollection.Instance.EnableOptimizations, BundleCollection.Instance.EnableInstrumentations);
             if (bundle is StyleBundle)
             {
-                if (Styles == null)
-                {
-                    Styles = new Styles();
-                }
                 Styles.StyleBundles.TryAdd(bundle.Route, bundle);
             }
             else if (bundle is ScriptBundle)
             {
-                if (Scripts == null)
-                {
-                    Scripts = new Scripts();
-                }
                 Scripts.ScriptBundles.TryAdd(bundle.Route, bundle);
             }
         }

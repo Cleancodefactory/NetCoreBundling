@@ -18,7 +18,8 @@
       - Version 1.0.2: Fixed the ETag support, if the build-in minification transformation throws exception the not minified version is delivered and the error is logged (more error resilient).
       - Version 1.0.3: Adding CacheControl when optimization enabled: Public = true, MaxAge = TimeSpan.FromDays(365).
       - Version 1.0.4: Allow CacheControl when optimization enabled to be set from outside. The above defaults are still valid. Add the ETag as parameter to overcome issue with Chrome's very aggresive caching.
-      - Version 1.0.5: NUglify has a problem with the minification of large files, so we are changing our strategy and minify file by file and copy the chunks into big one which is cached and served. 
+      - Version 1.0.5: NUglify has a problem with the minification of large files, so we are changing our strategy and minify file by file and copy the chunks into big one which is cached and served.
+      - Version 1.0.6: Behavior change in the profile object (init Styles and Scripts in constructor) and avoid null exception.
     </PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
