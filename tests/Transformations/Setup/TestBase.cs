@@ -10,7 +10,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
 {
     public abstract class TestBase : IDisposable
     {
-        private const string DIRECTORY_NAME = "TestFolder\\";
+        private const string DIRECTORY_NAME = @"TestFolder";
         private const string BUNDLE_ROUTE = "kraftjs";
 
         private string _ModuleContent;
