@@ -4,7 +4,9 @@ using Ccf.Ck.Libs.Web.Bundling.Transformations;
 using Microsoft.Extensions.FileProviders;
 using Moq;
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 using Xunit;
 
 namespace Ccf.Ck.Web.Bundling.Test.Transformations
@@ -19,7 +21,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         public void CheckFilePathTransformation_OnValidInput_ShouldReturnValidBundelFileCountAndContent()
         {
             var path = "some path";
-            var virtualPath = new List<string>() { $"{_DirName}{_ModuleCSS}", $"{_DirName}{_WorkspacewindowCSS}" };
+            var virtualPath = new HashSet<string>() { $"{_DirName}{_ModuleCSS}", $"{_DirName}{_WorkspacewindowCSS}" };
             var fileInfoMock = new Mock<IFileInfo>();
 
             fileInfoMock.Setup(x => x.PhysicalPath).Returns(path);
@@ -34,21 +36,25 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             var bundle = new StyleBundle(path, fileProvider);
             var response = new BundleResponse(bundle);
             var bundleContextMock = new Mock<BundleContext>("test", fileProvider, null, bundle);
+            var bundleContext = Activator.CreateInstance(typeof(BundleContext),new object[] { "test", fileProvider, null, bundle });
+            var type = bundleContext.GetType();
+            var prop = type.GetField("_InputBundleFiles", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            bundleContextMock.Setup(x => x.InputBundleFiles).Returns(virtualPath);
-
-            var bundleContext = bundleContextMock.Object;
+            prop.SetValue(bundleContext, virtualPath);
+            
             var filePatshTreansformation = new FilePathsTransformation();
 
-            filePatshTreansformation.Process(bundleContext, response);
-            int expectedResult = 2;
+            filePatshTreansformation.Process((BundleContext)bundleContext, response);
+            var expectedResult = 2;
             var bundleFilesCount = response.BundleFiles.Count;
 
             Assert.Equal(bundleFilesCount, expectedResult);
 
+            var virtualPathList = virtualPath.ToList();
+
             for (int i = 0; i < response.BundleFiles.Count; i++)
             {
-                bool isContains = response.BundleFiles.ContainsKey($"/{virtualPath[i]}");
+                bool isContains = response.BundleFiles.ContainsKey($"/{virtualPathList[i]}");
                 Assert.True(isContains);
             }
         }

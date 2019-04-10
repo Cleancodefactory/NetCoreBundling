@@ -3,6 +3,7 @@ using Ccf.Ck.Libs.Web.Bundling.Interfaces;
 using Ccf.Ck.Libs.Web.Bundling.Primitives;
 using Ccf.Ck.Libs.Web.Bundling.Transformations;
 using Microsoft.Extensions.FileProviders;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,79 +11,79 @@ using Xunit;
 
 namespace Ccf.Ck.Web.Bundling.Test.Transformations
 {
-    public class FileContentReaderTransformationTest : IDisposable
+    public class FileContentReaderTransformationTest
     {
-        private string _ModuleCSSContent = "/*\r\n    #using \"./ bindkraft -public-profile.css\"\r\n*/\r\n";
-        private string _WorkspacewindowCSSContent = "{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\noverflow: auto;\r\nheight: 100%;\r\nmin-width:30em;\r\n}\r\n";
-
-        private string _ModuleCSS = "bk-module.css";
-        private string _WorkspacewindowCSS = "bk-workspacewindow.css";
         private string _DirName = "TestFolder\\";
-        
         private BundleContext _BundleContext;
         private BundleResponse _Response;
-        FileContentReaderTransformation _ContentReaderTransformation;
+        private FileContentReaderTransformation _ContentReaderTransformation;
 
         public FileContentReaderTransformationTest()
         {
             _Response = new BundleResponse(null);
             _ContentReaderTransformation = new FileContentReaderTransformation();
-
-            string moduleFullPath = Path.Combine(_DirName, _ModuleCSS);
-            string workspacewindowFullPath = Path.Combine(_DirName, _WorkspacewindowCSS);
-
-            BundleFile bf = new BundleFile(null);
-            bf.PhysicalPath = moduleFullPath;
-
-            BundleFile bf2 = new BundleFile(null);
-            bf2.PhysicalPath = workspacewindowFullPath;
-
-            _Response.BundleFiles.Add("bundle-BK", bf);
-            _Response.BundleFiles.Add("bundle-BK2", bf2);
-            
-            Directory.CreateDirectory(_DirName);
-           
-            File.WriteAllText(moduleFullPath, _ModuleCSSContent);
-            File.WriteAllText(workspacewindowFullPath, _WorkspacewindowCSSContent);
         }
-        
+
         [Fact]
         public void CheckFileContentReaderTransformation_OnValidCSSInput_ShouldReturnValidOutput()
         {
-            string expectedResult = "/*\r\n    #using \"./ bindkraft -public-profile.css\"\r\n*/\r\n\r\n{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\noverflow: auto;\r\nheight: 100%;\r\nmin-width:30em;\r\n}\r\n\r\n";
-            _BundleContext = new BundleContext("kraftcss", null, null, null);
-            //_BundleContext.EnableOptimizations = true;
+            var expectedResult = "/*\r\n    #using \"./ bindkraft -public-profile.css\"\r\n*/\r\n{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\noverflow: auto;\r\nheight: 100%;\r\nmin-width:30em;\r\n}\r\n";
+            var moduleCssContent = "/*\r\n    #using \"./ bindkraft -public-profile.css\"\r\n*/\r\n";
+            var workspacewindowContent = "{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\noverflow: auto;\r\nheight: 100%;\r\nmin-width:30em;\r\n}\r\n";
+            var fileName = "bk-module.css";
+            var workspacewindow = "bk-workspacewindow.css";
 
-            _ContentReaderTransformation.Process(_BundleContext, _Response);
+            InitializeDirectoryAndFiles(moduleCssContent, workspacewindowContent, fileName, workspacewindow);
 
-            string result = _Response.Content.ToString();
-            bool isEmpty = string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
+            var bundleFiles = CreateBundleFiles(fileName, workspacewindow);
 
-            Assert.True(isEmpty);
-            Assert.Equal(expectedResult, result);
+            AddBundleFilesToResponse(bundleFiles, "bundle-BK", "bundle-BK2");
+
+            CheckFileContentReaderTransformation("kraftcss", expectedResult);
+
+            DeleteDirectoryIfExists();
         }
-        
+
         [Fact]
         public void CheckFileContentReaderTransformation_OnValidScriptInput_ShouldReturnValidOutput()
         {
-            string expectedResult = "/*\r\n    #using \"./ bindkraft -public-profile.css\"\r\n*/\r\n\r\n{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\noverflow: auto;\r\nheight: 100%;\r\nmin-width:30em;\r\n}\r\n\r\n";
+            var expectedResult = "/*\r\n    #using \"./ bindkraft -public-profile.js\"\r\n*/\r\n{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\nconsole.log();\r\n}\r\n";
+            var moduleJsContent = "/*\r\n    #using \"./ bindkraft -public-profile.js\"\r\n*/\r\n";
+            var workspacewindowContent = "{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\nconsole.log();\r\n}\r\n";
+            var fileName = "bk-module.js";
+            var workspacewindow = "bk-workspacewindow.css";
 
-            List<IBundleTransform> transformation = new List<IBundleTransform>();
+            InitializeDirectoryAndFiles(moduleJsContent, workspacewindowContent, fileName, workspacewindow);
+
+            var bundleFiles = CreateBundleFiles(fileName, workspacewindow);
+
+            AddBundleFilesToResponse(bundleFiles, "bundle-BK", "bundle-BK2");
+
+            CheckFileContentReaderTransformation("kraftjs", expectedResult);
+
+            DeleteDirectoryIfExists();
+        }
+
+        private void CheckFileContentReaderTransformation(string route, string expectedResult)
+        {
+            var transformation = new List<IBundleTransform>();
             IFileProvider fileProvider = null;
-            Bundle sb = new ScriptBundle(_DirName, fileProvider, null, transformation);
-            _BundleContext = new BundleContext("kraftcss", null, null, sb);
+            var sb = new ScriptBundle(_DirName, fileProvider, null, transformation);
+
+            _BundleContext = new BundleContext(route, null, null, sb);
             //_BundleContext.EnableOptimizations = true;
 
             _ContentReaderTransformation.Process(_BundleContext, _Response);
 
-            string result = _Response.Content.ToString();
-            bool isEmpty = string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
+            var results = _Response.BundleFiles.Values.Select(x => x.Content);
+            var result = string.Join("", results);
+            var isEmpty = string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
 
             Assert.True(isEmpty);
             Assert.Equal(expectedResult, result);
         }
-        
-        public void Dispose()
+
+        private void DeleteDirectoryIfExists()
         {
             if (Directory.Exists(_DirName))
             {
@@ -90,5 +91,46 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             }
         }
 
+        private void CreateFilesIfNotExists(string moduleFullPath, string workspacewindowFullPath, string moduleContent, string workspacewindowContent)
+        {
+            File.WriteAllText(moduleFullPath, moduleContent);
+            File.WriteAllText(workspacewindowFullPath, workspacewindowContent);
+        }
+
+        private void InitializeDirectoryAndFiles(string moduleContext, string workspacewindowContent, string fileName, string workspacewindow)
+        {
+            var moduleFullPath = Path.Combine(_DirName, fileName);
+            var workspacewindowFullPath = Path.Combine(_DirName, workspacewindow);
+
+            Directory.CreateDirectory(_DirName);
+
+            CreateFilesIfNotExists(moduleFullPath, workspacewindowFullPath, moduleContext, workspacewindowContent);
+        }
+
+        private List<BundleFile> CreateBundleFiles(string fileName, string workspacewindow)
+        {
+            var moduleFullPath = Path.Combine(_DirName, fileName);
+            var workspacewindowFullPath = Path.Combine(_DirName, workspacewindow);
+            var bundleFiles = new List<BundleFile>();
+            var bf1 = new BundleFile(null);
+
+            bf1.PhysicalPath = moduleFullPath;
+
+            var bf2 = new BundleFile(null);
+            bf2.PhysicalPath = workspacewindowFullPath;
+
+            bundleFiles.Add(bf1);
+            bundleFiles.Add(bf2);
+
+            return bundleFiles;
+        }
+
+        private void AddBundleFilesToResponse(List<BundleFile> bundleFiles, params string[] keys)
+        {
+            for (int i = 0; i < bundleFiles.Count; i++)
+            {
+                _Response.BundleFiles.Add(keys[i], bundleFiles[i]);
+            }
+        }
     }
 }

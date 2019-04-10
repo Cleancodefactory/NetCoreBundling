@@ -97,7 +97,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
             }
         }
 
-        public virtual List<string> InputBundleFiles
+        public List<string> InputBundleFiles
         {
             get
             {

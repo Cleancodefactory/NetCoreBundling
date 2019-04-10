@@ -45,11 +45,20 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             }
           
             _BundleContext = new BundleContext("kraftcss", null, null, _Bundle);
-            //_BundleContext.EnableOptimizations = true;
+
+            var bundleFileValue = new BundleFile(_Bundle);
 
             _InputContent.Append(input);
-            _Response.Content = _InputContent;
-            
+            bundleFileValue.Content = _InputContent;
+
+            var kvp = new Dictionary<string, BundleFile>();
+
+            kvp["input"] = bundleFileValue;
+            _BundleContext.GetType().GetProperty("EnableOptimizations").SetValue(_BundleContext, true);
+
+            var type = _Response.GetType();
+            type.GetProperty("BundleFiles").SetValue(_Response, kvp);
+
             m.Process(_BundleContext, _Response);
 
             string result = _Response.Content.ToString();

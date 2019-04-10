@@ -17,10 +17,4 @@
     <ProjectReference Include="..\src\Ccf.Ck.Libs.Web.Bundling.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="TestFolder\bk-module.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

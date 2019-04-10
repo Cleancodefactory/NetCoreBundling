@@ -1,6 +1,7 @@
 ﻿using Ccf.Ck.Libs.Web.Bundling.Primitives;
 using Ccf.Ck.Libs.Web.Bundling.Transformations;
 using Microsoft.Extensions.Logging;
+using Moq;
 using System.Text;
 using Xunit;
 
@@ -39,15 +40,15 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         [InlineData("<html><head></head><test>><<t></html>")]
         public void CheckHtmlTransformation_OnInvalidHtmlInput_ShouldReturnTransformationError(string input)
         {
-             HtmlTransformation ht = new HtmlTransformation();
+            HtmlTransformation ht = new HtmlTransformation();
 
             StringBuilder sb = new StringBuilder();
             sb.Append(input);
             
             ILoggerFactory loggerFac = new LoggerFactory();
-            //_BundleContext.Logger = loggerFac.CreateLogger("TestLogger");
+            var logger = loggerFac.CreateLogger("TestLogger");
 
-            ht.Process(sb, _BundleContext.Logger, _Response);
+            ht.Process(sb, logger, _Response);
             bool isEmpty = string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
 
             Assert.False(isEmpty);
