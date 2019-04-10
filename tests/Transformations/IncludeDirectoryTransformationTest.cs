@@ -14,8 +14,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
     {
         private BundleContext _BundleContext;
         private BundleResponse _Response;
-
-        private string _Dir = string.Empty;
+        private string _Dir;
 
         public IncludeDirectoryTransformationTest()
         {
@@ -36,9 +35,8 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         [Fact]
         public void IncludeDirectoryTransformationTest_OnValidResourceFiles_ShouldReturnValidBundledFilesCount()
         {
-            IncludeDirectoryTransformation idt = new IncludeDirectoryTransformation();
+            var idt = new IncludeDirectoryTransformation();
             IFileProvider provider = new PhysicalFileProvider(_Dir);
-
             var bundleContextMock = new Mock<BundleContext>("kraft", provider, null, null);
 
             _BundleContext = new BundleContext("kraft", provider, null, null);
@@ -46,10 +44,8 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             var type = _BundleContext.GetType();
             var methodInfo = type.GetMethod("IncludeDirectory", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            methodInfo.Invoke(_BundleContext,new object[] { "\\", "*", PatternType.All, true});
-           
+            methodInfo.Invoke(_BundleContext,new object[] { "\\", "*", PatternType.All, true}); 
             _Response = new BundleResponse(null);
-
             idt.Process(_BundleContext, _Response);
 
             Assert.Equal(2, _Response.BundleFiles.Count);

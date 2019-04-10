@@ -21,14 +21,16 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         [Fact]
         public void CheckHtmlTransformation_OnValidHtmlInput_ShouldReturnNoError()
         {
-            HtmlTransformation ht = new HtmlTransformation();
+            var ht = new HtmlTransformation();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("<html><head><title>BindKraft</title></head><body></body></html>");
 
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
+
             result = ht.Process(sb, null, _Response);
-            bool isEmpty = string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
+
+            var isEmpty = string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
 
             Assert.True(isEmpty);
             Assert.Equal("<title>BindKraft</title>", result.ToString());
@@ -40,16 +42,18 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         [InlineData("<html><head></head><test>><<t></html>")]
         public void CheckHtmlTransformation_OnInvalidHtmlInput_ShouldReturnTransformationError(string input)
         {
-            HtmlTransformation ht = new HtmlTransformation();
+            var ht = new HtmlTransformation();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
+
             sb.Append(input);
             
             ILoggerFactory loggerFac = new LoggerFactory();
             var logger = loggerFac.CreateLogger("TestLogger");
 
             ht.Process(sb, logger, _Response);
-            bool isEmpty = string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
+
+            var isEmpty = string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
 
             Assert.False(isEmpty);
         }

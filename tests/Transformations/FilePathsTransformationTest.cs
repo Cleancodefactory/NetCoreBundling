@@ -4,8 +4,8 @@ using Ccf.Ck.Libs.Web.Bundling.Transformations;
 using Microsoft.Extensions.FileProviders;
 using Moq;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Xunit;
 
@@ -45,6 +45,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             var filePatshTreansformation = new FilePathsTransformation();
 
             filePatshTreansformation.Process((BundleContext)bundleContext, response);
+
             var expectedResult = 2;
             var bundleFilesCount = response.BundleFiles.Count;
 

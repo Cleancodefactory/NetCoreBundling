@@ -2,11 +2,9 @@
 using Ccf.Ck.Libs.Web.Bundling.Interfaces;
 using Ccf.Ck.Libs.Web.Bundling.Primitives;
 using Ccf.Ck.Libs.Web.Bundling.Transformations;
-using Microsoft.Extensions.FileProviders;
-using System.Linq;
-using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Xunit;
 
 namespace Ccf.Ck.Web.Bundling.Test.Transformations
@@ -51,7 +49,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             var moduleJsContent = "/*\r\n    #using \"./ bindkraft -public-profile.js\"\r\n*/\r\n";
             var workspacewindowContent = "{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\nconsole.log();\r\n}\r\n";
             var fileName = "bk-module.js";
-            var workspacewindow = "bk-workspacewindow.css";
+            var workspacewindow = "bk-workspacewindow.js";
 
             InitializeDirectoryAndFiles(moduleJsContent, workspacewindowContent, fileName, workspacewindow);
 
@@ -67,8 +65,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         private void CheckFileContentReaderTransformation(string route, string expectedResult)
         {
             var transformation = new List<IBundleTransform>();
-            IFileProvider fileProvider = null;
-            var sb = new ScriptBundle(_DirName, fileProvider, null, transformation);
+            var sb = new ScriptBundle(_DirName, null, null, transformation);
 
             _BundleContext = new BundleContext(route, null, null, sb);
             //_BundleContext.EnableOptimizations = true;

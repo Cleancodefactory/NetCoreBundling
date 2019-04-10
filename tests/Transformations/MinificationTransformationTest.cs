@@ -31,17 +31,16 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         [InlineData(_JSInput, _ExpectedJsResult, true)]
         public void MinificationTransformation_OnValidInput_ShouldReturnNoErrorOutputAndValidResult(string input, string expectedResult ,bool isScriptBundle)
         {
-            MinificationTransformation m = new MinificationTransformation();
-            List<IBundleTransform> transformation = new List<IBundleTransform>();
-            IFileProvider fileProvider = null;
+            var m = new MinificationTransformation();
+            var transformation = new List<IBundleTransform>();
             
             if (isScriptBundle)
             {
-                _Bundle = new ScriptBundle("TestScript", fileProvider, null, transformation);
+                _Bundle = new ScriptBundle("TestScript", null, null, transformation);
             }
             else
             {
-                _Bundle = new StyleBundle("TestStyle", fileProvider, null, transformation);
+                _Bundle = new StyleBundle("TestStyle", null, null, transformation);
             }
           
             _BundleContext = new BundleContext("kraftcss", null, null, _Bundle);
@@ -57,12 +56,12 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             _BundleContext.GetType().GetProperty("EnableOptimizations").SetValue(_BundleContext, true);
 
             var type = _Response.GetType();
-            type.GetProperty("BundleFiles").SetValue(_Response, kvp);
 
+            type.GetProperty("BundleFiles").SetValue(_Response, kvp);
             m.Process(_BundleContext, _Response);
 
-            string result = _Response.Content.ToString();
-            bool isContainsError = !string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
+            var result = _Response.Content.ToString();
+            var isContainsError = !string.IsNullOrEmpty(_Response.TransformationErrors.ToString());
 
             Assert.Equal(expectedResult, result);
             Assert.False(isContainsError);
