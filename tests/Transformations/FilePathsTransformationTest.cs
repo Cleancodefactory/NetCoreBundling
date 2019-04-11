@@ -11,6 +11,8 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         [Fact]
         public void CheckFilePathTransformation_OnValidInput_ShouldReturnValidBundelFileCountAndContent()
         {
+            ContentReaderTransformation.Process(BundleContext, Response);
+
             int expectedResult = 2;
             int bundleFilesCount = Response.BundleFiles.Count;
 
