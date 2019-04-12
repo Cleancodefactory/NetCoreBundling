@@ -30,23 +30,14 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations.Setup
         }
 
         protected PhysicalFileProvider Provider { get; private set; }
+
         protected string BundleRoute => BUNDLE_ROUTE;
+
         protected List<IBundleTransform> Transformations { get; set; }
+
         protected string[] VirtualPaths { get; private set; }
 
         protected abstract Bundle Bundle { get; set; }
-
-        private void Initialize()
-        {
-            Directory.CreateDirectory(_DirectoryName);            
-            File.WriteAllText(Path.Combine(_DirectoryName, _ModuleFilename), _ModuleContent);
-            File.WriteAllText(Path.Combine(_DirectoryName, _WorkspaceWindowFileName), _WorkspaceWindowContent);
-
-            Provider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),_DirectoryName));
-
-            var dirInfo = new DirectoryInfo(_DirectoryName);
-            VirtualPaths = dirInfo.EnumerateFiles().Select(x => x.Name).ToArray();
-        }
 
         protected BundleResponse GetBundleResponse ()
         {
@@ -58,6 +49,18 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations.Setup
             }
 
             return bundleResponse;
+        }
+
+        private void Initialize()
+        {
+            Directory.CreateDirectory(_DirectoryName);
+            File.WriteAllText(Path.Combine(_DirectoryName, _ModuleFilename), _ModuleContent);
+            File.WriteAllText(Path.Combine(_DirectoryName, _WorkspaceWindowFileName), _WorkspaceWindowContent);
+
+            Provider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), _DirectoryName));
+
+            var dirInfo = new DirectoryInfo(_DirectoryName);
+            VirtualPaths = dirInfo.EnumerateFiles().Select(x => x.Name).ToArray();
         }
 
         public void Dispose()
