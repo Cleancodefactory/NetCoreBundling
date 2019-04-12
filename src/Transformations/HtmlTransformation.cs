@@ -59,7 +59,6 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
                         {
                             response.TransformationErrors.Append($"Error message: {error.Message}<br />Error details: {error.ToString()}").Append("<br />");
                         }
-
                         logger.LogCritical($"Error message: {error.Message} {Environment.NewLine} Error details: {error.ToString()}", error);
                     }
                 }

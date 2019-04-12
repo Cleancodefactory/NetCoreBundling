@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Ccf.Ck.Web.Bundling.Test")] 
 namespace Ccf.Ck.Libs.Web.Bundling
 {
     public abstract class Bundle
@@ -42,10 +41,6 @@ namespace Ccf.Ck.Libs.Web.Bundling
                 BundleContext.Transforms.Add(new LessTransformation());
                 //BundleContext.Transforms.Add(new BabelTransformation());
                 BundleContext.Transforms.Add(new MinificationTransformation());
-            } else
-            {
-                BundleContext.Transforms.Remove(BundleContext.Transforms.FirstOrDefault(x => x.GetType().Equals(typeof(FilePathsTransformation))));
-                BundleContext.Transforms.Insert(0, new FilePathsTransformation());
             }
             Route = FileUtility.RemoveFirstOccurenceSpecialCharacters(route, FileUtility.EStartPoint.FromStart, new char[] { '/', '\\' });
             HttpCacheability = HttpCacheability.Public;
