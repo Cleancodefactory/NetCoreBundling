@@ -1,42 +1,49 @@
-﻿using Ccf.Ck.Libs.Web.Bundling.Interfaces;
-using Ccf.Ck.Libs.Web.Bundling.Primitives;
+﻿using Ccf.Ck.Libs.Web.Bundling.Primitives;
 using Ccf.Ck.Libs.Web.Bundling.Transformations;
-using Ccf.Ck.Web.Bundling.Test.Transformations.Setup;
+using Microsoft.Extensions.FileProviders;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using Xunit;
 
 namespace Ccf.Ck.Web.Bundling.Test.Transformations
 {
-    public class FilePathsTransformationTest : CssTestBase
+    public class FilePathsTransformationTest
     {
-        public FilePathsTransformationTest() : base(new List<IBundleTransform>() { new FilePathsTransformation() })
+        private string _ModuleCSS = "bk-module.css";
+        private string _WorkspacewindowCSS = "bk-workspacewindow.css";
+        private string _DirName = "TestFolder\\";
+
+        private BundleContext _BundleContext;
+        private BundleResponse _Response;
+
+        public FilePathsTransformationTest()
         {
+            _BundleContext = new BundleContext("kraftcss", null, null, null);
+            _Response = new BundleResponse(null);
         }
 
         [Fact]
-        public void CheckFilePathTransformation_OnValidInput_ShouldReturnValidBundleFileCount()
+        public void CheckFilePathTransformation_OnValidInput_ShouldReturnValidBundelFileCountAndContent()
         {
-            BundleResponse bundleResponse = GetBundleResponse();
+            int expectedResult = 2;
+            string path = Directory.GetCurrentDirectory();
+            IFileProvider fileProvider = new PhysicalFileProvider(path);
 
-            int expected = 2;
-            int actual = bundleResponse.BundleFiles.Count;
+            string[] virtualPath = { $"{_DirName}{_ModuleCSS}", $"{_DirName}{_WorkspacewindowCSS}" };
 
-            Assert.Equal(actual, expected);
-        }
+            //_BundleContext.AddInputFiles(virtualPath);
+            //_BundleContext.FileProvider = fileProvider;
 
-        [Fact]
-        public void CheckFilePathTransformation_OnValidInput_ShouldReturnValidBundleFileContent()
-        {
-            string workspacewindowPath = @"/" + "bk-workspacewindow.css";
-            string cssModuleContentPath = @"/" + "bk-module.css";
-            List<string> paths = new List<string>() { workspacewindowPath, cssModuleContentPath };
+            FilePathsTransformation f = new FilePathsTransformation();
+            f.Process(_BundleContext, _Response);
 
-            BundleResponse bundleResponse = GetBundleResponse();
+            int result = _Response.BundleFiles.Count;
 
-            for (int i = 0; i < bundleResponse.BundleFiles.Count; i++)
+            Assert.Equal(result, expectedResult);
+
+            for (int i = 0; i < _Response.BundleFiles.Count; i++)
             {
-                bool isContains = bundleResponse.BundleFiles.ContainsKey(paths[i]);
+                bool isContains = _Response.BundleFiles.ContainsKey($"/{virtualPath[i]}");
                 Assert.True(isContains);
             }
         }
@@ -44,7 +51,13 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         [Fact]
         public void CheckFilePathTransformation_OnNullResponse_ShouldThrowNullReferenceException()
         {
-            Assert.Throws<ArgumentNullException>(() => Bundle.Transforms[0].Process(null, null));
+            FilePathsTransformation f = new FilePathsTransformation();
+            string[] virtualPath = { $"{_DirName}{_ModuleCSS}", $"{_DirName}{_WorkspacewindowCSS}" };
+            //_BundleContext.AddInputFiles(virtualPath);
+
+            Assert.Throws<NullReferenceException>(() => f.Process(_BundleContext, _Response));
+            Assert.True(!string.IsNullOrEmpty(_Response.TransformationErrors.ToString()));
+
         }
     }
 }
