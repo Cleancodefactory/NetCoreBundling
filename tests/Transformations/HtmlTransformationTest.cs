@@ -1,7 +1,6 @@
 ﻿using Ccf.Ck.Libs.Web.Bundling.Primitives;
 using Ccf.Ck.Libs.Web.Bundling.Transformations;
 using Microsoft.Extensions.Logging;
-using Moq;
 using System.Text;
 using Xunit;
 
