@@ -20,12 +20,13 @@
       - Version 1.0.4: Allow CacheControl when optimization enabled to be set from outside. The above defaults are still valid. Add the ETag as parameter to overcome issue with Chrome's very aggresive caching.
       - Version 1.0.5: NUglify has a problem with the minification of large files, so we are changing our strategy and minify file by file and copy the chunks into big one which is cached and served.
       - Version 1.0.6: Behavior change in the profile object (init Styles and Scripts in constructor) and avoid null exception.
+      - Version 1.0.7: Updated nuget references to the latest versions
     </PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="1.0.3" />
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="1.0.7" />
     <PackageReference Include="dotless.Core" Version="1.6.7" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" />
@@ -34,11 +35,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
-    <PackageReference Include="NUglify" Version="1.5.11" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.3" />
+    <PackageReference Include="NUglify" Version="1.5.14" />
   </ItemGroup>
 
   <ItemGroup>
