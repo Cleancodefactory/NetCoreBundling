@@ -1,6 +1,7 @@
 ﻿using Ccf.Ck.Libs.Web.Bundling.Primitives;
 using Microsoft.AspNetCore.Html;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Ccf.Ck.Libs.Web.Bundling
@@ -22,12 +23,28 @@ namespace Ccf.Ck.Libs.Web.Bundling
         public bool RemoveBundle(string bundleKey)
         {
             Bundle bundle;
-            bool found = ScriptBundles.TryGetValue(bundleKey, out bundle);
-            if (found)
+            bool result = ScriptBundles.TryRemove(bundleKey, out bundle);
+            if (bundle != null)
             {
-                return ScriptBundles.Values.Remove(bundle);
+                bundle.RemoveFromCache();
             }
-            return false;
+            return result;
+        }
+
+        public void RemoveAllBundles()
+        {
+            if (ScriptBundles.Values != null && ScriptBundles.Values.Count > 0)
+            {
+                List<string> keys = new List<string>(ScriptBundles.Values.Count);
+                foreach (Bundle bundle in ScriptBundles.Values)
+                {
+                    keys.Add(bundle.Route);
+                }
+                foreach (string key in keys)
+                {
+                    RemoveBundle(key);
+                }
+            }
         }
 
         public HtmlString Render(string bundleKey)

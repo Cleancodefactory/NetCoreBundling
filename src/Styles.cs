@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Ccf.Ck.Libs.Web.Bundling
@@ -23,12 +24,28 @@ namespace Ccf.Ck.Libs.Web.Bundling
         public bool RemoveBundle(string bundleKey)
         {
             Bundle bundle;
-            bool found = StyleBundles.TryGetValue(bundleKey, out bundle);
-            if (found)
+            bool result = StyleBundles.TryRemove(bundleKey, out bundle);
+            if (bundle != null)
             {
-                return StyleBundles.Values.Remove(bundle);
+                bundle.RemoveFromCache();
             }
-            return false;
+            return result;
+        }
+
+        public void RemoveAllBundles()
+        {
+            if (StyleBundles.Values != null && StyleBundles.Values.Count > 0)
+            {
+                List<string> keys = new List<string>(StyleBundles.Values.Count);
+                foreach (Bundle bundle in StyleBundles.Values)
+                {
+                    keys.Add(bundle.Route);
+                }
+                foreach (string key in keys)
+                {
+                    RemoveBundle(key);
+                }
+            }
         }
 
         public HtmlString Render(string bundleKey)
