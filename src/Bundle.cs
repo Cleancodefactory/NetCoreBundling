@@ -38,7 +38,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
                 BundleContext.Transforms.Add(new FilePathsTransformation());
                 BundleContext.Transforms.Add(new IncludeDirectoryTransformation());
                 BundleContext.Transforms.Add(new FileContentReaderTransformation());
-                BundleContext.Transforms.Add(new LessTransformation());
+                //BundleContext.Transforms.Add(new LessTransformation());
                 //BundleContext.Transforms.Add(new BabelTransformation());
                 BundleContext.Transforms.Add(new MinificationTransformation());
             }

@@ -34,7 +34,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
             InputCdns = new List<CdnObject>();
         }
 
-        internal void Init(IApplicationBuilder app, IHostingEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations, bool enableInstrumentations)
+        internal void Init(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations, bool enableInstrumentations)
         {
             ApplicationBuilder = app;
             HostingEnvironment = env;
@@ -66,7 +66,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
 
         internal List<CdnObject> InputCdns { get; set; }
 
-        public IHostingEnvironment HostingEnvironment { get; internal set; }
+        public IWebHostEnvironment HostingEnvironment { get; internal set; }
 
         public ILogger Logger { get; internal set; }
 

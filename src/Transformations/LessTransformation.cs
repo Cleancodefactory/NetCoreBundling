@@ -38,8 +38,12 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
                         response.Content = sb;
                         if (!lessEngine.LastTransformationSuccessful)
                         {
-                            response.TransformationErrors.Append($"Errors: {((LessEngine)lessEngine).LastTransformationError.Message}<br />Error details: {((LessEngine)lessEngine).LastTransformationError.ToString()}").Append("<br />");
-                            context.Logger.LogCritical($"Error message: {((LessEngine)lessEngine).LastTransformationError.Message} {Environment.NewLine} Error details: {((LessEngine)lessEngine).LastTransformationError.ToString()}", ((LessEngine)lessEngine).LastTransformationError);
+                            ParameterDecorator p = lessEngine as ParameterDecorator;
+                            CacheDecorator d = p.Underlying as CacheDecorator;
+                            LessEngine l = d.Underlying as LessEngine;
+                            string errMessage = l.LastTransformationError.Message;
+                            response.TransformationErrors.Append($"Errors: {errMessage}<br />Error details: {errMessage}").Append("<br />");
+                            context.Logger.LogCritical($"Error message: {errMessage} {Environment.NewLine} Error details: {errMessage}");
                         }
                     }
                     else if (context.EnableInstrumentation)

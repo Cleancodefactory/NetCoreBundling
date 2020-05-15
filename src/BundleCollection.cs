@@ -28,7 +28,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
             return Profiles.GetOrAdd(key, new Profile(key));
         }
 
-        internal BundleCollection(IApplicationBuilder app, IHostingEnvironment env, IHttpContextAccessor httpContextAccessor, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
+        internal BundleCollection(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
         {
             _BundleCollection = this;
             ApplicationBuilder = app;
@@ -42,7 +42,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
 
         internal IApplicationBuilder ApplicationBuilder { get; private set; }
         internal IHttpContextAccessor HttpContextAccessor { get; private set; }
-        internal IHostingEnvironment HostingEnvironment { get; private set; }
+        internal IWebHostEnvironment HostingEnvironment { get; private set; }
         internal ILogger Logger { get; private set; }
         internal string BaseBundlingRoute { get; private set; }
 

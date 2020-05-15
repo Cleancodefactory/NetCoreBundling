@@ -12,7 +12,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
 {
     public static class BundleExtensions
     {
-        public static BundleCollection UseBundling(this IApplicationBuilder builder, IHostingEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
+        public static BundleCollection UseBundling(this IApplicationBuilder builder, IWebHostEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations)
         {
             IHttpContextAccessor contextAccessor = builder.ApplicationServices.GetRequiredService<IHttpContextAccessor>();            
             if (contextAccessor == null)
