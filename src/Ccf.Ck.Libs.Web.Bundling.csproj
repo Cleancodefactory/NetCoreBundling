@@ -27,14 +27,15 @@
       - Version 1.0.11: Extend Scripts and Styles with an additional method for removing all bundles
       - Version 1.0.12 Update to TargetFramework netstandard2.1
       - Version 1.0.13 Update to TargetFramework netcoreapp3.1
+      - Version 1.0.14 Update underlying Nuget-Packages
     </PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="1.0.10" />
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="1.0.12" />
     <PackageReference Include="dotless.Core" Version="1.6.7" />
-    <PackageReference Include="NUglify" Version="1.5.14" />
+    <PackageReference Include="NUglify" Version="1.9.1" />
   </ItemGroup>
 
   <ItemGroup>
