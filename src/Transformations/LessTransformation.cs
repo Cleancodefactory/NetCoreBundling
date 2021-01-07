@@ -88,8 +88,8 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
 
         private void AddErrors(ParserException parserException, BundleContext context, BundleResponse response, string file)
         {
-            response.TransformationErrors.Append($"Error in {file}:<br />{parserException.Message}<br />Error details: {parserException.ToString()}").Append("<br />");
-            context.Logger.LogCritical($"Error in {file}: {parserException.Message} {Environment.NewLine} Error details: {parserException.ToString()}", parserException);
+            response.TransformationErrors.Append($"Error in {file}:<br />{parserException.Message}<br />Error details: {parserException}").Append("<br />");
+            context.Logger.LogCritical($"Error in {file}: {parserException.Message} {Environment.NewLine} Error details: {parserException}", parserException);
         }
 
         DotlessConfiguration ConfigureSettings(DotlessConfiguration lessSettings)

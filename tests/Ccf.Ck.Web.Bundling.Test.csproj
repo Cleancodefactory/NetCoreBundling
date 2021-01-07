@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="1.0.12" />
-    <PackageReference Include="NUglify" Version="1.9.1" />
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="1.0.21" />
+    <PackageReference Include="NUglify" Version="1.13.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 

@@ -13,7 +13,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
 
         public HtmlTransformationTest()
         {
-            _BundleContext = new BundleContext("kraftcss", null, null, null);
+            _BundleContext = new BundleContext("kraftcss", null, null, null, true);
             _Response = new BundleResponse(null);
         }
 

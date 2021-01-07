@@ -11,10 +11,12 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
         private string _PhysicalPath;
         private Bundle _Parent;
         private FileSystemWatcher _FileWatcher;
+        private bool _EnableWatch;
 
-        public BundleFile(Bundle parent)
+        public BundleFile(Bundle parent, bool enableWatcher)
         {
             _Parent = parent;
+            _EnableWatch = enableWatcher;
         }
         public string VirtualPath { get; set; }
         public string PhysicalPath
@@ -27,13 +29,18 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
             {
                 _PhysicalPath = value;
                 FileInfo fileInfo = new FileInfo(_PhysicalPath);
-                _FileWatcher = new FileSystemWatcher(fileInfo.Directory.FullName, fileInfo.Name);
-                _FileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite;
-                _FileWatcher.EnableRaisingEvents = true;
-                _FileWatcher.IncludeSubdirectories = false;
+                if (_EnableWatch)
+                {
+                    _FileWatcher = new FileSystemWatcher(fileInfo.Directory.FullName, fileInfo.Name)
+                    {
+                        NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite,
+                        EnableRaisingEvents = true,
+                        IncludeSubdirectories = false
+                    };
 
-                _FileWatcher.Renamed += FileWatcher_Renamed;
-                _FileWatcher.Changed += FileWatcher_Changed;
+                    _FileWatcher.Renamed += FileWatcher_Renamed;
+                    _FileWatcher.Changed += FileWatcher_Changed;
+                }
             }
         }
 
@@ -78,10 +85,13 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
 
         internal void CleanUpEvents()
         {
-            _FileWatcher.EnableRaisingEvents = false;
-            _FileWatcher.Renamed -= new RenamedEventHandler(FileWatcher_Renamed);
-            _FileWatcher.Changed -= new FileSystemEventHandler(FileWatcher_Changed);
-            _FileWatcher.Dispose();
+            if (_FileWatcher != null)
+            {
+                _FileWatcher.EnableRaisingEvents = false;
+                _FileWatcher.Renamed -= new RenamedEventHandler(FileWatcher_Renamed);
+                _FileWatcher.Changed -= new FileSystemEventHandler(FileWatcher_Changed);
+                _FileWatcher.Dispose();
+            }
         }
     }
 }

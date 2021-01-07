@@ -21,7 +21,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
         ///// <param name="route">The bundle virtual path.</param>
         ///// <param name="fileProvider">The configured fileprovider.</param>
         ///// <param name="transformations">Transformations which will carry the real bundling.</param>
-        public BundleContext(string route, IFileProvider fileProvider, List<IBundleTransform> transformations, Bundle bundle)
+        public BundleContext(string route, IFileProvider fileProvider, List<IBundleTransform> transformations, Bundle bundle, bool enableWatch)
         {
             BundleRoute = route;
             FileProvider = fileProvider;
@@ -32,6 +32,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
             ContentRaw = new StringBuilder(10000);
             IncludeDirectoryDataStructures = new List<IncludeDirectoryData>(3);
             InputCdns = new List<CdnObject>();
+            EnableWatch = enableWatch;
         }
 
         internal void Init(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger, string baseBundlingRoute, bool enableOptimizations, bool enableInstrumentations)
@@ -78,6 +79,11 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
         public bool EnableInstrumentation { get; internal set; }
 
         /// <summary>
+        /// Gets or sets whether the processed files should be watched for changes
+        /// </summary>
+        public bool EnableWatch { get; internal set; }
+
+        /// <summary>
         /// Gets or sets whether optimizations are enabled via <see cref="BundleCollection.EnableOptimizations"/>
         /// </summary>
         public bool EnableOptimizations { get; internal set; }
@@ -114,11 +120,13 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
 
         internal void IncludeDirectory(string directoryVirtualPath, string searchPattern, PatternType patternType, bool searchSubdirectories)
         {
-            IncludeDirectoryData includeDirectoryData = new IncludeDirectoryData();
-            includeDirectoryData.DirectoryVirtualPath = directoryVirtualPath;
-            includeDirectoryData.SearchPattern = searchPattern;
-            includeDirectoryData.SearchSubdirectories = searchSubdirectories;
-            includeDirectoryData.PatternType = patternType;
+            IncludeDirectoryData includeDirectoryData = new IncludeDirectoryData
+            {
+                DirectoryVirtualPath = directoryVirtualPath,
+                SearchPattern = searchPattern,
+                SearchSubdirectories = searchSubdirectories,
+                PatternType = patternType
+            };
             IncludeDirectoryDataStructures.Add(includeDirectoryData);
         }
 

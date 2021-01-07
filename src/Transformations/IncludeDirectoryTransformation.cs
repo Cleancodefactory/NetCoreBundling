@@ -86,7 +86,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
 
                 foreach (IFileInfo file in directoryFiles)
                 {
-                    files.Add(directoryPath + "/" + file.Name, new BundleFile(context.Parent) { PhysicalPath = file.PhysicalPath, VirtualPath = directoryPath + "/" + file.Name });
+                    files.Add(directoryPath + "/" + file.Name, new BundleFile(context.Parent, context.EnableWatch) { PhysicalPath = file.PhysicalPath, VirtualPath = directoryPath + "/" + file.Name });
                 }
 
                 // Need to recurse on subdirectories if requested

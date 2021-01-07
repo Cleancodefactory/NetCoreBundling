@@ -19,19 +19,21 @@ namespace Ccf.Ck.Libs.Web.Bundling
         private static readonly object _Lock = new object();
 
         #region Ctors
-        internal Bundle(string route) : this(route, BundleCollection.Instance.HostingEnvironment.WebRootFileProvider, null, new List<IBundleTransform>())
+        internal Bundle(string route) : this(route, BundleCollection.Instance.HostingEnvironment.WebRootFileProvider, null, new List<IBundleTransform>(), true)
         { }
 
-        internal Bundle(string route, IFileProvider fileProvider) : this(route, fileProvider, null, new List<IBundleTransform>())
+        internal Bundle(string route, IFileProvider fileProvider) : this(route, fileProvider, null, new List<IBundleTransform>(), true)
         { }
 
-        internal Bundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback) : this(route, fileProvider, customPropertiesCallback, new List<IBundleTransform>())
+        internal Bundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback) : this(route, fileProvider, customPropertiesCallback, new List<IBundleTransform>(), true)
         { }
 
-        internal Bundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback, List<IBundleTransform> transformations)
+        internal Bundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback, List<IBundleTransform> transformations, bool enableWatch)
         {
-            BundleContext = new BundleContext(route, fileProvider, transformations, this);
-            BundleContext.CustomPropertiesCallback = customPropertiesCallback;
+            BundleContext = new BundleContext(route, fileProvider, transformations, this, enableWatch)
+            {
+                CustomPropertiesCallback = customPropertiesCallback
+            };
             if (BundleContext.Transforms.Count == 0)
             {
                 //add the default transformations
@@ -205,8 +207,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
         private BundleResponse GetFromCache()
         {
             IMemoryCache memoryCache = BundleContext.ApplicationBuilder.ApplicationServices.GetRequiredService<IMemoryCache>();
-            BundleResponse bundleResponse;
-            if (memoryCache != null && memoryCache.TryGetValue(Route, out bundleResponse))
+            if (memoryCache != null && memoryCache.TryGetValue(Route, out BundleResponse bundleResponse))
             {
                 return bundleResponse;
             }
@@ -222,15 +223,15 @@ namespace Ccf.Ck.Libs.Web.Bundling
         { }
 
         public StyleBundle(string route, IFileProvider fileProvider) :
-            base(route, fileProvider, null, new List<IBundleTransform>())
+            base(route, fileProvider, null, new List<IBundleTransform>(), true)
         { }
 
         public StyleBundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback) :
-            base(route, fileProvider, customPropertiesCallback, new List<IBundleTransform>())
+            base(route, fileProvider, customPropertiesCallback, new List<IBundleTransform>(), true)
         { }
 
-        public StyleBundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback, List<IBundleTransform> transformations) :
-            base(route, fileProvider, customPropertiesCallback, transformations)
+        public StyleBundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback, List<IBundleTransform> transformations, bool enableWatch) :
+            base(route, fileProvider, customPropertiesCallback, transformations, enableWatch)
         { }
 
         public override string ContentType
@@ -248,15 +249,15 @@ namespace Ccf.Ck.Libs.Web.Bundling
         { }
 
         public ScriptBundle(string route, IFileProvider fileProvider) :
-            base(route, fileProvider, null, new List<IBundleTransform>())
+            base(route, fileProvider, null, new List<IBundleTransform>(), true)
         { }
 
         public ScriptBundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback) :
-            base(route, fileProvider, customPropertiesCallback, new List<IBundleTransform>())
+            base(route, fileProvider, customPropertiesCallback, new List<IBundleTransform>(), true)
         { }
 
-        public ScriptBundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback, List<IBundleTransform> transformations) :
-            base(route, fileProvider, customPropertiesCallback, transformations)
+        public ScriptBundle(string route, IFileProvider fileProvider, Func<string> customPropertiesCallback, List<IBundleTransform> transformations, bool enableWatch) :
+            base(route, fileProvider, customPropertiesCallback, transformations, enableWatch)
         { }
 
         public override string ContentType

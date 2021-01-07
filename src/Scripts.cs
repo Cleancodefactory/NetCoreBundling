@@ -22,8 +22,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
 
         public bool RemoveBundle(string bundleKey)
         {
-            Bundle bundle;
-            bool result = ScriptBundles.TryRemove(bundleKey, out bundle);
+            bool result = ScriptBundles.TryRemove(bundleKey, out Bundle bundle);
             if (bundle != null)
             {
                 bundle.RemoveFromCache();

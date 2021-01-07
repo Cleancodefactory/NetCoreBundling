@@ -31,11 +31,15 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             string moduleFullPath = Path.Combine(_DirName, _ModuleCSS);
             string workspacewindowFullPath = Path.Combine(_DirName, _WorkspacewindowCSS);
 
-            BundleFile bf = new BundleFile(null);
-            bf.PhysicalPath = moduleFullPath;
+            BundleFile bf = new BundleFile(null, true)
+            {
+                PhysicalPath = moduleFullPath
+            };
 
-            BundleFile bf2 = new BundleFile(null);
-            bf2.PhysicalPath = workspacewindowFullPath;
+            BundleFile bf2 = new BundleFile(null, true)
+            {
+                PhysicalPath = workspacewindowFullPath
+            };
 
             _Response.BundleFiles.Add("bundle-BK", bf);
             _Response.BundleFiles.Add("bundle-BK2", bf2);
@@ -50,7 +54,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
         public void CheckFileContentReaderTransformation_OnValidCSSInput_ShouldReturnValidOutput()
         {
             string expectedResult = "/*\r\n    #using \"./ bindkraft -public-profile.css\"\r\n*/\r\n\r\n{/* GENERIC */\r\n\r\n/* desktop */\r\n.bk-desktop {\r\noverflow: auto;\r\nheight: 100%;\r\nmin-width:30em;\r\n}\r\n\r\n";
-            _BundleContext = new BundleContext("kraftcss", null, null, null);
+            _BundleContext = new BundleContext("kraftcss", null, null, null, true);
             //_BundleContext.EnableOptimizations = true;
 
             _ContentReaderTransformation.Process(_BundleContext, _Response);
@@ -69,8 +73,8 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
 
             List<IBundleTransform> transformation = new List<IBundleTransform>();
             IFileProvider fileProvider = null;
-            Bundle sb = new ScriptBundle(_DirName, fileProvider, null, transformation);
-            _BundleContext = new BundleContext("kraftcss", null, null, sb);
+            Bundle sb = new ScriptBundle(_DirName, fileProvider, null, transformation, true);
+            _BundleContext = new BundleContext("kraftcss", null, null, sb, true);
             //_BundleContext.EnableOptimizations = true;
 
             _ContentReaderTransformation.Process(_BundleContext, _Response);

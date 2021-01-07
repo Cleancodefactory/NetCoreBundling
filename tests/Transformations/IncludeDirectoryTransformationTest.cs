@@ -37,7 +37,7 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             IncludeDirectoryTransformation idt = new IncludeDirectoryTransformation();
             IFileProvider provider = new PhysicalFileProvider(_Dir);
 
-            _BundleContext = new BundleContext("kraft", provider, null, null);
+            _BundleContext = new BundleContext("kraft", provider, null, null, true);
             //_BundleContext.IncludeDirectory("\\", "*", Utils.PatternType.All, true);
 
             _Response = new BundleResponse(null);

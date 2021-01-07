@@ -37,14 +37,14 @@ namespace Ccf.Ck.Web.Bundling.Test.Transformations
             
             if (isScriptBundle)
             {
-                _Bundle = new ScriptBundle("TestScript", fileProvider, null, transformation);
+                _Bundle = new ScriptBundle("TestScript", fileProvider, null, transformation, true);
             }
             else
             {
-                _Bundle = new StyleBundle("TestStyle", fileProvider, null, transformation);
+                _Bundle = new StyleBundle("TestStyle", fileProvider, null, transformation, true);
             }
           
-            _BundleContext = new BundleContext("kraftcss", null, null, _Bundle);
+            _BundleContext = new BundleContext("kraftcss", null, null, _Bundle, true);
             //_BundleContext.EnableOptimizations = true;
 
             _InputContent.Append(input);
