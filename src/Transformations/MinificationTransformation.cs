@@ -97,10 +97,14 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
         {
             if (uglifyResult.HasErrors)
             {
+                StringBuilder sbShortMessage = new StringBuilder(100);
+                StringBuilder sbLongMessage = new StringBuilder(1000);
                 foreach (UglifyError error in uglifyResult.Errors)
                 {
-                    AddErrors(error.Message, error.ToString(), context, response, file);
+                    sbShortMessage.AppendLine($"Error during minification: {error.Message} | Severity: {error.Severity}");
+                    sbLongMessage.AppendLine($"{error.ToString()}");
                 }
+                AddErrors(sbShortMessage.ToString(), sbLongMessage.ToString(), context, response, file);
             }
         }
 

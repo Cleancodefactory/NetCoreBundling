@@ -29,6 +29,7 @@
       - Version 1.0.13 Update to TargetFramework netcoreapp3.1
       - Version 1.0.14 Update underlying Nuget-Packages
       - Version 1.0.15 Extend the Bundle creation with parameter for Enable/Disable file watchers
+      - Version 1.0.16 Combine all minification errors for a file in one error message
     </PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
