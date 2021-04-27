@@ -14,7 +14,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
 {
     public class BundleContext
     {
-        private HashSet<string> _InputBundleFiles;
+        private List<InputFile> _InputBundleFiles;
         ///// <summary>
         ///// Initializes a new instance of the <see cref="BundleContext"/> class.
         ///// </summary>
@@ -27,7 +27,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
             FileProvider = fileProvider;
             Transforms = transformations;
             BundleCollection = BundleCollection.Instance;
-            _InputBundleFiles = new HashSet<string>();
+            _InputBundleFiles = new List<InputFile>();
             Parent = bundle;
             ContentRaw = new StringBuilder(10000);
             IncludeDirectoryDataStructures = new List<IncludeDirectoryData>(3);
@@ -57,12 +57,9 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
 
         public IApplicationBuilder ApplicationBuilder { get; internal set; }
 
-        internal void AddInputFiles(string[] virtualPaths)
+        internal void AddInputFiles(InputFile[] inputFiles)
         {
-            foreach (string fileName in virtualPaths)
-            {
-                _InputBundleFiles.Add(fileName);
-            }
+            _InputBundleFiles.AddRange(inputFiles);
         }
 
         internal List<CdnObject> InputCdns { get; set; }
@@ -103,11 +100,11 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
             }
         }
 
-        public List<string> InputBundleFiles
+        public List<InputFile> InputBundleFiles
         {
             get
             {
-                return _InputBundleFiles.ToList();
+                return _InputBundleFiles;
             }
         }
 

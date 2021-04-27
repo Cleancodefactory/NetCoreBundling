@@ -51,6 +51,9 @@ namespace Ccf.Ck.Libs.Web.Bundling
         #endregion Ctors
 
         #region Public
+        /// <summary>
+        /// Add your own transformations in the order you want them to be executed
+        /// </summary>
         public IList<IBundleTransform> Transforms
         {
             get
@@ -59,18 +62,50 @@ namespace Ccf.Ck.Libs.Web.Bundling
             }
         }
 
+        /// <summary>
+        /// Include only virtual paths. The lib will calculate the physical path with help of the virtual provider
+        /// </summary>
+        /// <param name="virtualPaths"></param>
+        /// <returns></returns>
         public virtual Bundle Include(params string[] virtualPaths)
         {
-            BundleContext.AddInputFiles(virtualPaths);
+            InputFile[] inputFiles = new InputFile[virtualPaths.Length];
+            for (int i = 0; i < virtualPaths.Length; i++)
+            {
+                InputFile inputFile = new InputFile { VirtualPath = virtualPaths[i] };
+                inputFiles[i] = inputFile;
+            }
+            BundleContext.AddInputFiles(inputFiles);
             return this;
         }
 
+        /// <summary>
+        /// Include files with physical path or virtual path definded
+        /// </summary>
+        /// <param name="inputFiles"></param>
+        /// <returns></returns>
+        public virtual Bundle Include(params InputFile[] inputFiles)
+        {
+            BundleContext.AddInputFiles(inputFiles);
+            return this;
+        }
+
+        /// <summary>
+        /// Add raw content which will be added at the end of the produced output
+        /// </summary>
+        /// <param name="contentRaw"></param>
+        /// <returns></returns>
         public virtual Bundle IncludeContent(string contentRaw)
         {
             BundleContext.ContentRaw.Append(contentRaw);
             return this;
         }
 
+        /// <summary>
+        /// Support for CDNs
+        /// </summary>
+        /// <param name="cdn"></param>
+        /// <returns></returns>
         public virtual Bundle IncludeCdn(CdnObject cdn)
         {
             BundleContext.InputCdns.Add(cdn);

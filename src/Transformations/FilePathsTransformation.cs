@@ -1,6 +1,7 @@
 ﻿using Ccf.Ck.Libs.Web.Bundling.Interfaces;
 using Ccf.Ck.Libs.Web.Bundling.Primitives;
 using System;
+using System.IO;
 using static Ccf.Ck.Libs.Web.Bundling.Utils.FileUtility;
 
 namespace Ccf.Ck.Libs.Web.Bundling.Transformations
@@ -19,13 +20,20 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
             }
             try
             {
-                foreach (string inputFile in context.InputBundleFiles)
+                foreach (InputFile inputFile in context.InputBundleFiles)
                 {
                     BundleFile bundleFile = new BundleFile(context.Parent, context.EnableWatch)
                     {
-                        VirtualPath = $"/{RemoveFirstOccurenceSpecialCharacters(inputFile, EStartPoint.FromStart, new char[] { '/', '\\', '~' })}"
+                        VirtualPath = $"/{RemoveFirstOccurenceSpecialCharacters(inputFile.VirtualPath, EStartPoint.FromStart, new char[] { '/', '\\', '~' })}"
                     };
-                    bundleFile.PhysicalPath = context.FileProvider.GetFileInfo(bundleFile.VirtualPath).PhysicalPath;
+                    if (!string.IsNullOrEmpty(inputFile.PhysicalPath))
+                    {
+                        bundleFile.PhysicalPath = inputFile.PhysicalPath;
+                    }
+                    else
+                    {
+                        bundleFile.PhysicalPath = context.FileProvider.GetFileInfo(bundleFile.VirtualPath).PhysicalPath;
+                    }
                     response.BundleFiles.Add(bundleFile.VirtualPath, bundleFile);
                 }
             }
