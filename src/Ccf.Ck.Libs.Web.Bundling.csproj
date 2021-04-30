@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <!-- Nuget specific tags -->
@@ -31,14 +31,15 @@
       - Version 1.0.15 Extend the Bundle creation with parameter for Enable/Disable file watchers
       - Version 1.0.16 Combine all minification errors for a file in one error message
       - Version 1.0.17 Adding support for optional dependencies
+      - Version 5.0.0 Migrate to net5.0
     </PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="1.0.21" />
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="5.0.0" />
     <PackageReference Include="dotless.Core" Version="1.6.7" />
-    <PackageReference Include="NUglify" Version="1.13.1" />
+    <PackageReference Include="NUglify" Version="1.13.9" />
   </ItemGroup>
 
   <ItemGroup>
