@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
+using Ccf.Ck.Libs.Logging;
 
 namespace Ccf.Ck.Libs.Web.Bundling
 {
@@ -73,7 +74,9 @@ namespace Ccf.Ck.Libs.Web.Bundling
                     }
                 }
             }
-            throw new Exception($"The requested bundle {bundleKey} doesn't exist.");
+            KraftLogger.LogWarning($"The requested bundle {bundleKey} doesn't exist.");
+            return null;
+            //throw new Exception($"The requested bundle {bundleKey} doesn't exist.");
         }
     }
 }

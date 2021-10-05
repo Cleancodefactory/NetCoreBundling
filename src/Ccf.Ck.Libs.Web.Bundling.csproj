@@ -12,34 +12,35 @@
     <RepositoryUrl>https://github.com/cleancodefactory/netcorebundling</RepositoryUrl>
     <PackageTags>bundling transformation runtime modification debug release mode optimization</PackageTags>
     <PackageReleaseNotes>
-      Bundling and optimization framework for .NET Core and .NET-Standard projects.
-      Adding support for profiles. You can combine different bundles into one profile and render only this profile. Comes handy when you have multiple Master Pages (e.g. for public or administration) and want to easily render the different profiles.
-      - Added ETag support
-      - Version 1.0.2: Fixed the ETag support, if the build-in minification transformation throws exception the not minified version is delivered and the error is logged (more error resilient).
-      - Version 1.0.3: Adding CacheControl when optimization enabled: Public = true, MaxAge = TimeSpan.FromDays(365).
-      - Version 1.0.4: Allow CacheControl when optimization enabled to be set from outside. The above defaults are still valid. Add the ETag as parameter to overcome issue with Chrome's very aggresive caching.
-      - Version 1.0.5: NUglify has a problem with the minification of large files, so we are changing our strategy and minify file by file and copy the chunks into big one which is cached and served.
-      - Version 1.0.6: Behavior change in the profile object (init Styles and Scripts in constructor) and avoid null exception.
-      - Version 1.0.7: Updated nuget references to the latest versions
-      - Version 1.0.8: Downgrade Microsoft packages from 3.1.3 to 2.2.0
-      - Version 1.0.9: Update nuget Ccf.Ck.Libs.Logging
-      - Version 1.0.10: Update nuget: remove  Microsoft.Extensions.DependencyInjection.Abstractions Version=3.1.3
-      - Version 1.0.11: Extend Scripts and Styles with an additional method for removing all bundles
-      - Version 1.0.12 Update to TargetFramework netstandard2.1
-      - Version 1.0.13 Update to TargetFramework netcoreapp3.1
-      - Version 1.0.14 Update underlying Nuget-Packages
-      - Version 1.0.15 Extend the Bundle creation with parameter for Enable/Disable file watchers
-      - Version 1.0.16 Combine all minification errors for a file in one error message
-      - Version 1.0.17 Adding support for optional dependencies
-      - Version 5.0.0 Migrate to net5.0
-    </PackageReleaseNotes>
+		Bundling and optimization framework for .NET Core and .NET-Standard projects.
+		Adding support for profiles. You can combine different bundles into one profile and render only this profile. Comes handy when you have multiple Master Pages (e.g. for public or administration) and want to easily render the different profiles.
+		- Added ETag support
+		- Version 1.0.2: Fixed the ETag support, if the build-in minification transformation throws exception the not minified version is delivered and the error is logged (more error resilient).
+		- Version 1.0.3: Adding CacheControl when optimization enabled: Public = true, MaxAge = TimeSpan.FromDays(365).
+		- Version 1.0.4: Allow CacheControl when optimization enabled to be set from outside. The above defaults are still valid. Add the ETag as parameter to overcome issue with Chrome's very aggresive caching.
+		- Version 1.0.5: NUglify has a problem with the minification of large files, so we are changing our strategy and minify file by file and copy the chunks into big one which is cached and served.
+		- Version 1.0.6: Behavior change in the profile object (init Styles and Scripts in constructor) and avoid null exception.
+		- Version 1.0.7: Updated nuget references to the latest versions
+		- Version 1.0.8: Downgrade Microsoft packages from 3.1.3 to 2.2.0
+		- Version 1.0.9: Update nuget Ccf.Ck.Libs.Logging
+		- Version 1.0.10: Update nuget: remove  Microsoft.Extensions.DependencyInjection.Abstractions Version=3.1.3
+		- Version 1.0.11: Extend Scripts and Styles with an additional method for removing all bundles
+		- Version 1.0.12 Update to TargetFramework netstandard2.1
+		- Version 1.0.13 Update to TargetFramework netcoreapp3.1
+		- Version 1.0.14 Update underlying Nuget-Packages
+		- Version 1.0.15 Extend the Bundle creation with parameter for Enable/Disable file watchers
+		- Version 1.0.16 Combine all minification errors for a file in one error message
+		- Version 1.0.17 Adding support for optional dependencies
+		- Version 5.0.0 Migrate to net5.0
+		- Version 5.0.1 Update nuget dependencies and introduce version.txt for extending the eTag with external versioning
+	</PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="5.0.0" />
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="5.0.2" />
     <PackageReference Include="dotless.Core" Version="1.6.7" />
-    <PackageReference Include="NUglify" Version="1.13.9" />
+    <PackageReference Include="NUglify" Version="1.16.0" />
   </ItemGroup>
 
   <ItemGroup>

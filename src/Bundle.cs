@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Ccf.Ck.Libs.Web.Bundling
@@ -21,6 +22,25 @@ namespace Ccf.Ck.Libs.Web.Bundling
         #region Ctors
         internal Bundle(string route) : this(route, BundleCollection.Instance.HostingEnvironment.WebRootFileProvider, null, new List<IBundleTransform>(), true)
         { }
+
+        internal Bundle(string route, string versionFile) : this(route, BundleCollection.Instance.HostingEnvironment.WebRootFileProvider, null, new List<IBundleTransform>(), true)
+        {
+            try
+            {
+                string fileInfoExisting = BundleCollection.Instance.HostingEnvironment.WebRootFileProvider.GetFileInfo(versionFile).PhysicalPath;
+                using (FileStream fs = new FileStream(fileInfoExisting, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    using (StreamReader sr = new StreamReader(fs))
+                    {
+                        ExternalVersion = sr.ReadToEnd();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                KraftLogger.LogError($"Version file: {versionFile} throws an exception: {ex.Message}", ex);
+            }
+        }
 
         internal Bundle(string route, IFileProvider fileProvider) : this(route, fileProvider, null, new List<IBundleTransform>(), true)
         { }
@@ -168,6 +188,14 @@ namespace Ccf.Ck.Libs.Web.Bundling
         }
 
         public abstract string ContentType { get; }
+        public string ExternalVersion { get; internal set; }
+        public string VERSION_INTERNAL_REPLACEMENT
+        {
+            get
+            {
+                return "@@@version@@@";
+            }
+        }
         #endregion Public
 
         #region Internal 
@@ -225,7 +253,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
         internal void RemoveFromCache()
         {
             IMemoryCache memoryCache = BundleContext.ApplicationBuilder.ApplicationServices.GetRequiredService<IMemoryCache>();
-            
+
             BundleResponse bundleResponse = GetFromCache();
             if (bundleResponse != null)
             {
@@ -257,6 +285,10 @@ namespace Ccf.Ck.Libs.Web.Bundling
             base(route)
         { }
 
+        public StyleBundle(string route, string versionFile) :
+           base(route, versionFile)
+        { }
+
         public StyleBundle(string route, IFileProvider fileProvider) :
             base(route, fileProvider, null, new List<IBundleTransform>(), true)
         { }
@@ -281,6 +313,10 @@ namespace Ccf.Ck.Libs.Web.Bundling
     public class ScriptBundle : Bundle
     {
         public ScriptBundle(string route) : base(route)
+        { }
+
+        public ScriptBundle(string route, string versionFile) :
+            base(route, versionFile)
         { }
 
         public ScriptBundle(string route, IFileProvider fileProvider) :

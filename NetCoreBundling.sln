@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ccf.Ck.Libs.Web.Bundling", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ccf.Ck.Web.Bundling.Test", "tests\Ccf.Ck.Web.Bundling.Test.csproj", "{A0E5D45B-52AE-4638-AB34-86ECF6742024}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "tests\Web\WebApplication1\WebApplication1.csproj", "{8AE267A9-709A-494A-B12A-84BBF63239F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A0E5D45B-52AE-4638-AB34-86ECF6742024}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0E5D45B-52AE-4638-AB34-86ECF6742024}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0E5D45B-52AE-4638-AB34-86ECF6742024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AE267A9-709A-494A-B12A-84BBF63239F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AE267A9-709A-494A-B12A-84BBF63239F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AE267A9-709A-494A-B12A-84BBF63239F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AE267A9-709A-494A-B12A-84BBF63239F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

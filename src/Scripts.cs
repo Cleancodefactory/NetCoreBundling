@@ -68,7 +68,13 @@ namespace Ccf.Ck.Libs.Web.Bundling
                     additional += !string.IsNullOrEmpty(cdn.Crossorigin) ? $" crossorigin='{cdn.Crossorigin}'" : string.Empty;
                     sb.Append($"<script src='{cdn.CdnPath}' {additional}></script>");
                 }
-                sb.Append($"<script src='{bundle.BundleContext.HttpContext?.Request.PathBase}/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}?{bundleResponse.ETag}' type='text/javascript'></script>");
+                string eTag = bundleResponse.ETag;
+                if (!string.IsNullOrEmpty(bundle.ExternalVersion))
+                {
+                    bundleResponse.Content = bundleResponse.Content.Replace(bundle.VERSION_INTERNAL_REPLACEMENT, bundle.ExternalVersion + "-" + bundleResponse.ETag);
+                    eTag = bundle.ExternalVersion + "-" + bundleResponse.ETag;
+                }
+                sb.Append($"<script src='{bundle.BundleContext.HttpContext?.Request.PathBase}/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}?{eTag}' type='text/javascript'></script>");
             }
             else
             {
