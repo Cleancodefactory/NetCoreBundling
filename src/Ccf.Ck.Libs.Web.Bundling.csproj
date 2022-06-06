@@ -33,7 +33,8 @@
 		- Version 1.0.17 Adding support for optional dependencies
 		- Version 5.0.0 Migrate to net5.0
 		- Version 5.0.1 Update nuget dependencies and introduce version.txt for extending the eTag with external versioning
-		- Version 6.0.0  Updated to .NET 6.0
+		- Version 6.0.6  Updated to .NET 6.0
+		- Version 6.0.7  Handle the disposed dependency injection container
 	</PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>

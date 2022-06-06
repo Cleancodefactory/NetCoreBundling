@@ -51,8 +51,8 @@ namespace Ccf.Ck.Libs.Web.Bundling.Primitives
             KraftLogger.LogError("FileWatcher_Changed PhysicalPath: " + PhysicalPath);
             KraftLogger.LogError("FileWatcher_Changed VirtualPath: " + VirtualPath);
             fileWatcher.Changed -= new FileSystemEventHandler(FileWatcher_Changed);
-            fileWatcher.Dispose();
             _Parent?.RemoveFromCache();
+            fileWatcher.Dispose();            
         }
 
         private void FileWatcher_Renamed(object sender, RenamedEventArgs e)

@@ -252,19 +252,26 @@ namespace Ccf.Ck.Libs.Web.Bundling
 
         internal void RemoveFromCache()
         {
-            IMemoryCache memoryCache = BundleContext.ApplicationBuilder.ApplicationServices.GetRequiredService<IMemoryCache>();
-
-            BundleResponse bundleResponse = GetFromCache();
-            if (bundleResponse != null)
+            try
             {
-                foreach (var bundleFile in bundleResponse.BundleFiles)
+                IMemoryCache memoryCache = BundleContext.ApplicationBuilder.ApplicationServices.GetService<IMemoryCache>();
+
+                BundleResponse bundleResponse = GetFromCache();
+                if (bundleResponse != null)
                 {
-                    //KraftLogger.LogError("PhysicalPath: " + bundleFile.Value.PhysicalPath);
-                    //KraftLogger.LogError("VirtualPath: " + bundleFile.Value.VirtualPath);
-                    bundleFile.Value.CleanUpEvents();
+                    foreach (var bundleFile in bundleResponse.BundleFiles)
+                    {
+                        //KraftLogger.LogError("PhysicalPath: " + bundleFile.Value.PhysicalPath);
+                        //KraftLogger.LogError("VirtualPath: " + bundleFile.Value.VirtualPath);
+                        bundleFile.Value.CleanUpEvents();
+                    }
                 }
+                memoryCache?.Remove(Route);
             }
-            memoryCache?.Remove(Route);
+            catch (Exception)
+            {
+                //do nothing probably services already disposed
+            }            
         }
 
         private BundleResponse GetFromCache()
