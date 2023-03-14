@@ -175,7 +175,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
         {
             if (ExceptionUtil.IsPureWildcardSearchPattern(searchPattern))
             {
-                throw new ArgumentException(BundlingResources.InvalidWildcardSearchPattern, "searchPattern");
+                throw new ArgumentException(BundlingResources.InvalidWildcardSearchPattern, nameof(searchPattern));
             }
             PatternType patternType = PatternHelper.GetPatternType(searchPattern);
             Exception error = PatternHelper.ValidatePattern(patternType, searchPattern, "virtualPaths");
@@ -189,7 +189,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
 
         public abstract string ContentType { get; }
         public string ExternalVersion { get; internal set; }
-        public string VERSION_INTERNAL_REPLACEMENT
+        public static string VERSION_INTERNAL_REPLACEMENT
         {
             get
             {

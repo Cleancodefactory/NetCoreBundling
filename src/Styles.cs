@@ -74,7 +74,7 @@ namespace Ccf.Ck.Libs.Web.Bundling
                 string eTag = bundleResponse.ETag;
                 if (!string.IsNullOrEmpty(bundle.ExternalVersion))
                 {
-                    bundleResponse.Content = bundleResponse.Content.Replace(bundle.VERSION_INTERNAL_REPLACEMENT, bundle.ExternalVersion + "-" + bundleResponse.ETag);
+                    bundleResponse.Content = bundleResponse.Content.Replace(Bundle.VERSION_INTERNAL_REPLACEMENT, bundle.ExternalVersion + "-" + bundleResponse.ETag);
                     eTag = bundle.ExternalVersion + "-" + bundleResponse.ETag;
                 }
                 sb.Append($"<link href='{bundle.BundleContext.HttpContext?.Request.PathBase}/{bundle.BundleContext.BaseBundlingRoute}/{bundle.Route}?{eTag}' rel='stylesheet'/>");
