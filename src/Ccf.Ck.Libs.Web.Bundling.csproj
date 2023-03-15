@@ -37,12 +37,13 @@
 		- Version 6.0.7  Handle the disposed dependency injection container
 		- Version 6.0.8  Change logging from error to trace for the file watchers
 		- Version 7.0.0  Updated to .NET 7.0
+		- Version 7.0.1  Updated nuget for logging
 	</PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="7.0.0" />
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="7.0.1" />
     <PackageReference Include="dotless.Core" Version="1.6.7" />
     <PackageReference Include="NUglify" Version="1.20.5" />
   </ItemGroup>
