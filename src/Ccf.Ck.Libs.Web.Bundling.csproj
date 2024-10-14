@@ -39,7 +39,8 @@
 		- Version 7.0.0  Updated to .NET 7.0
 		- Version 7.0.1  Updated nuget for logging
 		- Version 7.0.2  Updated nuget for logging and minification
-    - Version 8.0.0  Updated to .NET 8.0
+		- Version 8.0.0  Updated to .NET 8.0
+		- Version 8.0.1  Throw exception if referenced file is not available
 	</PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>

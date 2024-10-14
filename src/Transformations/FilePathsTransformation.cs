@@ -33,6 +33,10 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
                     else
                     {
                         bundleFile.PhysicalPath = context.FileProvider.GetFileInfo(bundleFile.VirtualPath).PhysicalPath;
+                        if (bundleFile.PhysicalPath == null)
+                        {
+                            throw new Exception($"The file: {bundleFile.VirtualPath} was not found, please provide it to the bundler and start again!" );
+                        }
                     }
                     response.BundleFiles.Add(bundleFile.VirtualPath, bundleFile);
                 }
