@@ -132,7 +132,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
             codeSettings.LocalRenaming = LocalRenaming.CrunchAll;
             codeSettings.MinifyCode = true;
             codeSettings.OutputMode = OutputMode.SingleLine;
-            codeSettings.PreserveImportantComments = true;
+            codeSettings.PreserveImportantComments = false;
             codeSettings.TermSemicolons = true;
             codeSettings.InlineSafeStrings = true;
             codeSettings.StripDebugStatements = true;
