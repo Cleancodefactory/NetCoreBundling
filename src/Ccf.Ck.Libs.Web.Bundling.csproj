@@ -41,6 +41,7 @@
 		- Version 7.0.2  Updated nuget for logging and minification
 		- Version 8.0.0  Updated to .NET 8.0
 		- Version 8.0.1  Throw exception if referenced file is not available
+		- Version 8.0.2  codeSettings.StripDebugStatements = true | codeSettings.RemoveUnneededCode = true; | codeSettings.CollapseToLiteral = true;
 	</PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
