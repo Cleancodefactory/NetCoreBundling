@@ -127,7 +127,7 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
 
         CodeSettings ConfigureSettings(CodeSettings codeSettings)
         {
-            codeSettings.AlwaysEscapeNonAscii = true;
+            codeSettings.AlwaysEscapeNonAscii = false;
             codeSettings.EvalTreatment = EvalTreatment.Ignore;
             codeSettings.LocalRenaming = LocalRenaming.CrunchAll;
             codeSettings.MinifyCode = true;
@@ -135,6 +135,9 @@ namespace Ccf.Ck.Libs.Web.Bundling.Transformations
             codeSettings.PreserveImportantComments = true;
             codeSettings.TermSemicolons = true;
             codeSettings.InlineSafeStrings = true;
+            codeSettings.StripDebugStatements = true;
+            codeSettings.RemoveUnneededCode = true;
+            codeSettings.CollapseToLiteral = true;
 
             return codeSettings;
         }

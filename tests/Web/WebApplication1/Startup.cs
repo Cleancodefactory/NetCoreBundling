@@ -35,15 +35,15 @@ namespace WebApplication1
         {
             //Bundling
             BundleCollection bundleCollection = app.UseBundling(env, loggerFactory.CreateLogger("Bundling"), "res", true);
-            bundleCollection.EnableInstrumentations = env.IsDevelopment(); //Logging enabled
-                                                                           //Configure bundles
-            //bundleCollection.Profile("mvc").Add(new StyleBundle("cssbundle")
-            //    .Include(@"~/css/site.css")
-            //    .IncludeCdn(new CdnObject { CdnPath = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", Integrity = "sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", Crossorigin = "anonymous" })
-            //    .IncludeCdn(new CdnObject { CdnPath = "https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.css" })
-            //    .IncludeCdn(new CdnObject { CdnPath = "https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.woff" }));
-            //bundleCollection.Profile("mvc").Add(new ScriptBundle("jsbundle")
-            //    .Include(@"~/js/site.js"));
+            bundleCollection.EnableInstrumentations = true;// env.IsDevelopment(); //Logging enabled
+                //Configure bundles
+                //bundleCollection.Profile("mvc").Add(new StyleBundle("cssbundle")
+                //    .Include(@"~/css/site.css")
+                //    .IncludeCdn(new CdnObject { CdnPath = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", Integrity = "sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", Crossorigin = "anonymous" })
+                //    .IncludeCdn(new CdnObject { CdnPath = "https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.css" })
+                //    .IncludeCdn(new CdnObject { CdnPath = "https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.woff" }));
+            bundleCollection.Profile("mvc").Add(new ScriptBundle("jsbundle")
+                .Include(@"~/js/site.js"));
 
             if (env.IsDevelopment())
             {
