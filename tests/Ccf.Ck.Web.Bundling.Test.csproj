@@ -1,14 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
 	  <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="8.0.2" />
-    <PackageReference Include="NUglify" Version="1.21.9" />
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="9.0.0" />
+    <PackageReference Include="NUglify" Version="1.21.11" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
   </ItemGroup>
 
