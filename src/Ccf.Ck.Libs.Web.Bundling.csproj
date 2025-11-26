@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <!-- Nuget specific tags -->
@@ -43,15 +43,16 @@
 		- Version 8.0.1  Throw exception if referenced file is not available
 		- Version 8.0.2  codeSettings.StripDebugStatements = true | codeSettings.RemoveUnneededCode = true; | codeSettings.CollapseToLiteral = true;
 		- Version 9.0.0  Updated to .NET 9.0
+    - Version 10.0.0  Updated to .NET 10.0
 	</PackageReleaseNotes>
     <!-- Description and Release notes -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="9.0.0" />
+    <PackageReference Include="Ccf.Ck.Libs.Logging" Version="10.0.0" />
     <PackageReference Include="dotless.Core" Version="1.6.7" />
-    <PackageReference Include="NUglify" Version="1.21.11" />
-    <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
+    <PackageReference Include="NUglify" Version="1.21.17" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
